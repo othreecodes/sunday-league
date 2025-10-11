@@ -1,103 +1,155 @@
-import Image from "next/image";
+'use client'
+
+import Link from 'next/link'
+import { useSession, signOut } from 'next-auth/react'
+import { Trophy, Target, Users, Calendar, TrendingUp, Shield, User, LogOut, Settings } from 'lucide-react'
+import './page.css'
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { data: session, status } = useSession()
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="home-container">
+      <header className="home-header">
+        <div className="header-content">
+          <div className="logo">
+            <Trophy size={40} strokeWidth={2} />
+            <div className="logo-text">
+              <h1>Cowrywise FC</h1>
+              <p>Sunday League Manager</p>
+            </div>
+          </div>
+          <div className="header-actions">
+            <Link href="/league" className="header-link">
+              League
+            </Link>
+            {status === 'loading' ? (
+              <div className="header-loading">Loading...</div>
+            ) : session ? (
+              <>
+                {session.user.role === 'ADMIN' && (
+                  <Link href="/admin" className="header-link">
+                    <Settings size={18} />
+                    Admin
+                  </Link>
+                )}
+                <Link href="/profile" className="header-link">
+                  Profile
+                </Link>
+                <div className="user-info">
+                  <User size={18} />
+                  <span>{session.user.name}</span>
+                </div>
+                <button onClick={() => signOut()} className="btn-signout">
+                  <LogOut size={18} />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link href="/auth/signin" className="btn-signin">
+                Sign In
+              </Link>
+            )}
+          </div>
         </div>
+      </header>
+
+      <main className="home-main">
+        <section className="hero">
+          <h2>
+            {session ? `Welcome back, ${session.user.name}!` : 'Welcome to Cowrywise FC'}
+          </h2>
+          <p className="hero-description">
+            {session
+              ? 'Your complete Sunday league football management system. Track matches, record results, and view live standings.'
+              : 'Your complete Sunday league football management system. Track matches, record results, and view live standings.'}
+          </p>
+
+          <div className="cta-buttons">
+            <Link href="/league" className="btn btn-primary">
+              <Trophy size={20} />
+              View League Table
+            </Link>
+            {session ? (
+              session.user.role === 'ADMIN' ? (
+                <Link href="/admin" className="btn btn-secondary">
+                  <Settings size={20} />
+                  Admin Dashboard
+                </Link>
+              ) : (
+                <Link href="/profile" className="btn btn-secondary">
+                  <User size={20} />
+                  My Profile
+                </Link>
+              )
+            ) : (
+              <Link href="/auth/register" className="btn btn-secondary">
+                Get Started
+              </Link>
+            )}
+          </div>
+        </section>
+
+        <section className="features">
+          <div className="feature-card">
+            <div className="feature-icon">
+              <Trophy size={32} />
+            </div>
+            <h3>League Table</h3>
+            <p>Track team standings with automatic point calculations and live updates</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">
+              <Target size={32} />
+            </div>
+            <h3>Match Management</h3>
+            <p>Schedule matches and record goals, assists, and cards in real-time</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">
+              <TrendingUp size={32} />
+            </div>
+            <h3>Player Stats</h3>
+            <p>View top scorers, assists, and comprehensive player statistics</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">
+              <Users size={32} />
+            </div>
+            <h3>Team Management</h3>
+            <p>Organize teams and manage group memberships with ease</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">
+              <Calendar size={32} />
+            </div>
+            <h3>Season Tracking</h3>
+            <p>Manage multiple seasons and track historical performance</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">
+              <Shield size={32} />
+            </div>
+            <h3>Admin Controls</h3>
+            <p>Powerful admin dashboard for complete league management</p>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="home-footer">
+        <div className="footer-content">
+          <div className="footer-brand">
+            <Trophy size={24} />
+            <span>Cowrywise FC</span>
+          </div>
+          <p>&copy; 2025 Cowrywise FC Sunday League Manager. All rights reserved.</p>
+        </div>
       </footer>
     </div>
-  );
+  )
 }

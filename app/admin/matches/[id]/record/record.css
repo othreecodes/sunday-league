@@ -1,0 +1,375 @@
+.record-container {
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.record-header {
+  background: #1e1e1e;
+  color: white;
+  padding: 1.5rem 1rem;
+  border-bottom: 3px solid #e90052;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  transition: opacity 0.2s;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+}
+
+.record-header h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+.record-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.match-overview {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.overview-teams {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.overview-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.overview-team-name {
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+  font-size: 1.125rem;
+}
+
+.overview-score {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #e90052;
+}
+
+.overview-vs {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 0 1.5rem;
+}
+
+.overview-info {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.875rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.record-sections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.record-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #e90052;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-add:hover {
+  background: #c4003e;
+}
+
+.event-form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #e90052;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.btn-submit {
+  padding: 0.75rem 1.5rem;
+  background: #1e1e1e;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover {
+  background: #000;
+}
+
+.btn-submit:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #f3f4f6;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.empty-message {
+  text-align: center;
+  color: #6b7280;
+  padding: 2rem;
+  font-size: 0.875rem;
+}
+
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+.event-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.event-minute {
+  font-weight: 600;
+  color: #e90052;
+  min-width: 2.5rem;
+}
+
+.event-player {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.event-assist {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.event-reason {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.card-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card-yellow {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.card-red {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-delete-small {
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete-small:hover {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+.complete-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.btn-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-complete:hover {
+  background: #047857;
+}
+
+.complete-warning {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.loading-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-size: 1.125rem;
+}
+
+@media (min-width: 640px) {
+  .overview-team {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .overview-team:first-child {
+    flex-direction: row;
+  }
+
+  .overview-team:last-child {
+    flex-direction: row-reverse;
+  }
+}
+
+@media (min-width: 768px) {
+  .record-sections {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .record-header h1 {
+    font-size: 2rem;
+  }
+}
