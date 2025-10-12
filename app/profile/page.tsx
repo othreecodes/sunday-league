@@ -82,7 +82,7 @@ export default function ProfilePage() {
             <User size={64} strokeWidth={1.5} />
           </div>
           <h2 className="profile-name">{session.user.name}</h2>
-          <p className="profile-email">{session.user.email}</p>
+          <p className="profile-email">@{session.user.nickname}</p>
           <div className="profile-role-badge">
             <Shield size={16} />
             <span>{session.user.role}</span>

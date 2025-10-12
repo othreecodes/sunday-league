@@ -18,7 +18,7 @@ export async function GET(
           include: {
             members: {
               include: {
-                user: { select: { id: true, name: true } }
+                user: { select: { id: true, name: true, nickname: true } }
               }
             }
           }
@@ -27,27 +27,27 @@ export async function GET(
           include: {
             members: {
               include: {
-                user: { select: { id: true, name: true } }
+                user: { select: { id: true, name: true, nickname: true } }
               }
             }
           }
         },
         goals: {
           include: {
-            scorer: { select: { id: true, name: true } },
-            assist: { select: { id: true, name: true } }
+            scorer: { select: { id: true, name: true, nickname: true } },
+            assist: { select: { id: true, name: true, nickname: true } }
           },
           orderBy: { minute: "asc" }
         },
         cards: {
           include: {
-            user: { select: { id: true, name: true } }
+            user: { select: { id: true, name: true, nickname: true } }
           },
           orderBy: { minute: "asc" }
         },
         players: {
           include: {
-            user: { select: { id: true, name: true } }
+            user: { select: { id: true, name: true, nickname: true } }
           }
         }
       }

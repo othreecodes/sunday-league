@@ -11,6 +11,7 @@ import './match-detail.css'
 interface User {
   id: string
   name: string
+  nickname: string | null
 }
 
 interface Card {
@@ -283,9 +284,9 @@ export default function MatchDetail() {
                         <Target size={20} className="goal-icon" />
                       </div>
                       <div className="event-details">
-                        <span className="event-player">{goal.scorer.name}</span>
+                        <span className="event-player">{goal.scorer.nickname || goal.scorer.name}</span>
                         {goal.assist && (
-                          <span className="event-secondary">Assist: {goal.assist.name}</span>
+                          <span className="event-secondary">Assist: {goal.assist.nickname || goal.assist.name}</span>
                         )}
                         <span className="event-team">
                           {isHome ? match.homeGroup.name : match.awayGroup.name}
@@ -325,7 +326,7 @@ export default function MatchDetail() {
                         <div className={`card-icon ${isSecondYellow ? 'red' : card.cardType?.toLowerCase() || 'unknown'}`}></div>
                       </div>
                       <div className="event-details">
-                        <span className="event-player">{card.user.name}</span>
+                        <span className="event-player">{card.user.nickname || card.user.name}</span>
                         <span className="event-secondary">
                           {isSecondYellow ? (
                             <>
@@ -358,7 +359,7 @@ export default function MatchDetail() {
                 {match.homeGroup.members.map((member, index) => (
                   <div key={member.user.id} className="squad-member">
                     <span className="squad-number">{index + 1}</span>
-                    <span className="squad-name">{member.user.name}</span>
+                    <span className="squad-name">{member.user.nickname || member.user.name}</span>
                   </div>
                 ))}
               </div>
@@ -371,7 +372,7 @@ export default function MatchDetail() {
                 {match.awayGroup.members.map((member, index) => (
                   <div key={member.user.id} className="squad-member">
                     <span className="squad-number">{index + 1}</span>
-                    <span className="squad-name">{member.user.name}</span>
+                    <span className="squad-name">{member.user.nickname || member.user.name}</span>
                   </div>
                 ))}
               </div>
