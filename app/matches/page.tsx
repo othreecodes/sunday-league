@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { Calendar, MapPin, Clock, Trophy, RefreshCw, Filter } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
@@ -36,7 +37,7 @@ interface Match {
 function MatchesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const teamFilter = searchParams.get('team')
+  const { data: session, status } = useSession()
 
   const [seasons, setSeasons] = useState<Season[]>([])
   const [selectedSeason, setSelectedSeason] = useState<string>('')
@@ -45,7 +46,17 @@ function MatchesContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [teamFilter, setTeamFilter] = useState<string>('all')
+  const [allGroups, setAllGroups] = useState<Group[]>([])
   const [teamName, setTeamName] = useState<string>('')
+
+  // Redirect admin users to admin matches view
+  useEffect(() => {
+    if (status === 'loading') return
+    if (session?.user.role === 'ADMIN') {
+      router.replace('/admin/matches')
+    }
+  }, [session, status, router])
 
   useEffect(() => {
     fetchSeasons()
@@ -59,13 +70,22 @@ function MatchesContent() {
 
   useEffect(() => {
     filterMatches()
-  }, [matches, statusFilter, selectedSeason])
+  }, [matches, statusFilter, teamFilter, selectedSeason])
 
   const fetchSeasons = async () => {
     try {
       const response = await fetch('/api/seasons')
       const data = await response.json()
       setSeasons(data)
+
+      // Collect all groups from all seasons
+      const allGroupsData: Group[] = []
+      data.forEach((season: any) => {
+        if (season.groups) {
+          allGroupsData.push(...season.groups)
+        }
+      })
+      setAllGroups(allGroupsData)
 
       // Select active season or first season by default
       const activeSeason = data.find((s: Season) => s.isActive)
@@ -103,8 +123,8 @@ function MatchesContent() {
       filtered = filtered.filter(m => m.season.name === selectedSeasonData.name)
     }
 
-    // Filter by team (if team parameter is present)
-    if (teamFilter) {
+    // Filter by team
+    if (teamFilter !== 'all') {
       filtered = filtered.filter(m =>
         m.homeGroup.id === teamFilter || m.awayGroup.id === teamFilter
       )
@@ -204,7 +224,7 @@ function MatchesContent() {
           </MobileCard>
         )}
 
-        {/* Status Filter */}
+        {/* Filters */}
         <MobileCard padding="medium" className="status-filter-card">
           <div className="status-filter-content">
             <Filter size={20} />
@@ -220,6 +240,27 @@ function MatchesContent() {
             </select>
           </div>
         </MobileCard>
+
+        {/* Team Filter */}
+        {allGroups.length > 0 && (
+          <MobileCard padding="medium" className="status-filter-card">
+            <div className="status-filter-content">
+              <Filter size={20} />
+              <select
+                value={teamFilter}
+                onChange={(e) => setTeamFilter(e.target.value)}
+                className="status-filter-select"
+              >
+                <option value="all">All Teams</option>
+                {allGroups.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </MobileCard>
+        )}
 
         {error && (
           <div className="mobile-error-message">{error}</div>
@@ -248,7 +289,7 @@ function MatchesContent() {
               <div className="mobile-section">
                 <div className="mobile-section-header">
                   <h2 className="mobile-section-title">
-                    {teamFilter ? (
+                    {teamFilter !== 'all' ? (
                       <span>
                         {teamName || 'Team'} Matches
                       </span>
@@ -261,17 +302,7 @@ function MatchesContent() {
                       </>
                     )}
                   </h2>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {teamFilter && (
-                      <button
-                        onClick={() => router.push('/matches')}
-                        className="clear-filter-btn"
-                      >
-                        Clear
-                      </button>
-                    )}
-                    <span className="match-count">{filteredMatches.length}</span>
-                  </div>
+                  <span className="match-count">{filteredMatches.length}</span>
                 </div>
 
                 <div className="mobile-card-list">
