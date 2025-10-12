@@ -3,146 +3,163 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
-  padding: 1rem;
+  background: #F2F2F7; /* iOS system background */
+  padding: 16px;
 }
 
 .auth-card {
   background: white;
-  border-radius: 1rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 20px; /* iOS modal radius */
+  box-shadow: none;
   width: 100%;
   max-width: 400px;
-  padding: 2rem;
+  padding: 32px 24px;
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
 }
 
 .auth-header h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #1e40af;
-  margin-bottom: 0.5rem;
+  font-size: 28px; /* iOS Title 1 */
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 8px;
+  letter-spacing: 0.364px;
 }
 
 .auth-header p {
-  color: #6b7280;
-  font-size: 0.875rem;
+  color: #8E8E93; /* iOS secondary label */
+  font-size: 15px; /* iOS subheadline */
+  letter-spacing: -0.24px;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .form-group label {
   font-weight: 600;
-  color: #1f2937;
-  font-size: 0.875rem;
+  color: #000000;
+  font-size: 15px; /* iOS subheadline */
+  letter-spacing: -0.24px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  padding: 14px 12px;
+  border: 0.5px solid rgba(60, 60, 67, 0.29); /* iOS separator */
+  border-radius: 10px; /* iOS input radius */
+  font-size: 17px; /* iOS body */
+  letter-spacing: -0.408px;
+  background: #F2F2F7; /* iOS tertiary fill */
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #1e40af;
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  border-color: #007AFF; /* iOS system blue */
+  background: white;
+  box-shadow: none;
 }
 
 .form-group input:disabled {
-  background-color: #f3f4f6;
+  background-color: #E5E5EA;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .error-message {
-  padding: 0.75rem;
-  background: #fee2e2;
-  border: 1px solid #ef4444;
-  border-radius: 0.5rem;
-  color: #dc2626;
-  font-size: 0.875rem;
+  padding: 12px;
+  background: rgba(255, 59, 48, 0.1); /* iOS red tint */
+  border: 0.5px solid #FF3B30; /* iOS system red */
+  border-radius: 10px;
+  color: #FF3B30;
+  font-size: 15px;
+  letter-spacing: -0.24px;
 }
 
 .success-message {
-  padding: 0.75rem;
-  background: #d1fae5;
-  border: 1px solid #10b981;
-  border-radius: 0.5rem;
-  color: #059669;
-  font-size: 0.875rem;
+  padding: 12px;
+  background: rgba(52, 199, 89, 0.1); /* iOS green tint */
+  border: 0.5px solid #34C759; /* iOS system green */
+  border-radius: 10px;
+  color: #34C759;
+  font-size: 15px;
+  letter-spacing: -0.24px;
 }
 
 .btn {
   display: inline-block;
-  padding: 0.875rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 14px 20px;
+  border-radius: 13px; /* iOS button radius */
   font-weight: 600;
   text-align: center;
-  transition: all 0.2s;
+  transition: transform 0.1s ease-out, opacity 0.15s ease;
   cursor: pointer;
   border: none;
-  font-size: 1rem;
+  font-size: 17px; /* iOS body */
+  letter-spacing: -0.408px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary {
-  background: #1e40af;
+  background: #007AFF; /* iOS system blue */
   color: white;
   width: 100%;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1e3a8a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  opacity: 0.85;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.96);
+  opacity: 0.7;
 }
 
 .btn-primary:disabled {
-  background: #9ca3af;
+  background: #C7C7CC; /* iOS quaternary label */
   cursor: not-allowed;
   transform: none;
+  opacity: 0.5;
 }
 
 .auth-footer {
-  margin-top: 1.5rem;
+  margin-top: 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .auth-footer p {
-  color: #6b7280;
-  font-size: 0.875rem;
+  color: #8E8E93; /* iOS secondary label */
+  font-size: 15px;
+  letter-spacing: -0.24px;
 }
 
 .link {
-  color: #1e40af;
+  color: #007AFF; /* iOS system blue */
   font-weight: 600;
   text-decoration: none;
+  transition: opacity 0.15s ease;
 }
 
-.link:hover {
-  text-decoration: underline;
+.link:active {
+  opacity: 0.3;
 }
 
 @media (min-width: 640px) {

@@ -2,7 +2,7 @@
 .back-btn {
   background: none;
   border: none;
-  color: #e90052;
+  color: #007AFF; /* iOS system blue */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,7 +15,7 @@
 }
 
 .back-btn:active {
-  background: rgba(233, 0, 82, 0.1);
+  background: rgba(0, 122, 255, 0.1);
 }
 
 /* Stats Grid */
@@ -38,7 +38,7 @@
 }
 
 .stat-icon {
-  color: #e90052;
+  color: #007AFF; /* iOS system blue */
   flex-shrink: 0;
 }
 
@@ -150,7 +150,7 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.75rem;
-  color: #e90052;
+  color: #007AFF; /* iOS system blue */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -175,7 +175,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid #e5e7eb;
-  border-top-color: #e90052;
+  border-top-color: #007AFF; /* iOS system blue */
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -238,6 +238,84 @@
   .stat-value {
     font-size: 2.25rem;
   }
+}
+
+/* Compact Match Card */
+.match-card-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.match-header-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.match-date-compact {
+  font-size: 0.875rem;
+  color: #8E8E93; /* iOS secondary label */
+  font-weight: 500;
+}
+
+.match-result-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.match-vs-compact {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.team-label-compact {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #8E8E93; /* iOS secondary label */
+}
+
+.opponent-name-compact {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+.score-compact {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #000000;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status-scheduled {
+  background: rgba(0, 122, 255, 0.1); /* iOS blue with opacity */
+  color: #007AFF;
+}
+
+.status-live {
+  background: rgba(255, 204, 0, 0.2); /* iOS yellow with opacity */
+  color: #FF9500;
+}
+
+.status-completed {
+  background: rgba(52, 199, 89, 0.15); /* iOS green with opacity */
+  color: #34C759;
 }
 
 /* Desktop */

@@ -1,7 +1,7 @@
 /* Mobile-First Home Page Styles */
 .home-mobile-container {
   min-height: 100vh;
-  background: #f3f4f6;
+  background: #F2F2F7; /* iOS system background */
   padding-bottom: 80px;
 }
 
@@ -53,29 +53,31 @@
 .quick-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .action-card {
   background: white;
-  border-radius: 0.75rem;
-  padding: 1rem;
+  border-radius: 13px; /* iOS grouped list radius */
+  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #e5e7eb;
+  gap: 16px;
+  transition: transform 0.1s ease-out, opacity 0.15s ease;
+  border: 0.5px solid rgba(0, 0, 0, 0.04);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .action-card:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+  opacity: 0.9;
 }
 
 .action-icon {
   width: 56px;
   height: 56px;
-  border-radius: 0.75rem;
+  border-radius: 13px; /* iOS rounded square icon */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,27 +85,27 @@
 }
 
 .action-icon.primary {
-  background: linear-gradient(135deg, #e90052 0%, #c4003e 100%);
+  background: #007AFF; /* iOS system blue */
   color: white;
 }
 
 .action-icon.secondary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: #34C759; /* iOS system green */
   color: white;
 }
 
 .action-icon.record {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: #FF9500; /* iOS system orange */
   color: white;
 }
 
 .action-icon.admin {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: #5856D6; /* iOS system purple */
   color: white;
 }
 
 .action-icon.profile {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  background: #AF52DE; /* iOS system pink */
   color: white;
 }
 
@@ -112,20 +114,22 @@
 }
 
 .action-content h4 {
-  font-size: 1rem;
+  font-size: 17px; /* iOS body */
   font-weight: 600;
-  color: #1e1e1e;
-  margin: 0 0 0.25rem 0;
+  color: #000000;
+  margin: 0 0 2px 0;
+  letter-spacing: -0.408px;
 }
 
 .action-content p {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 13px; /* iOS footnote */
+  color: #8E8E93; /* iOS secondary label */
   margin: 0;
+  letter-spacing: -0.078px;
 }
 
 .action-arrow {
-  color: #9ca3af;
+  color: #C7C7CC; /* iOS chevron color */
   flex-shrink: 0;
 }
 
@@ -182,25 +186,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 8px;
   width: 100%;
-  padding: 0.75rem;
-  background: #f3f4f6;
-  color: #1e1e1e;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
+  padding: 12px;
+  background: #F2F2F7; /* iOS tertiary system fill */
+  color: #FF3B30; /* iOS system red for destructive action */
+  border: none;
+  border-radius: 13px;
   font-weight: 600;
-  font-size: 0.9375rem;
+  font-size: 17px;
+  letter-spacing: -0.408px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.1s ease-out, opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .btn-signout-mobile:hover {
-  background: #e5e7eb;
+  background: #E5E5EA;
 }
 
 .btn-signout-mobile:active {
-  transform: scale(0.98);
+  transform: scale(0.96);
+  opacity: 0.8;
 }
 
 /* Tablet */

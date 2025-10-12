@@ -1,13 +1,13 @@
 .mobile-container {
   min-height: 100vh;
-  background: #f9fafb;
-  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  background: #F2F2F7; /* iOS system background */
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
 }
 
 .mobile-container.padded {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 16px;
 }
 
 /* Section grouping */
@@ -31,14 +31,15 @@
 }
 
 .mobile-section-action {
-  font-size: 0.875rem;
-  color: #e90052;
+  font-size: 17px;
+  color: #007AFF; /* iOS system blue */
   font-weight: 600;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 8px;
   min-height: 44px;
+  letter-spacing: -0.408px;
 }
 
 .mobile-section-action:active {

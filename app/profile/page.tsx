@@ -1,10 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { User, Trophy, Target, Shield, Calendar, Users, Home, ArrowLeft } from 'lucide-react'
+import { User, Trophy, Target, Shield, Calendar, Users, LogOut, ChevronRight } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './profile.css'
 
 interface UserStats {
@@ -47,116 +50,165 @@ export default function ProfilePage() {
     }
   }
 
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/auth/signin' })
+  }
+
   if (status === 'loading' || !session) {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
-      </div>
+      <>
+        <MobileHeader title="Profile" />
+        <MobileContainer>
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading...</p>
+          </div>
+        </MobileContainer>
+      </>
     )
   }
 
   return (
-    <div className="profile-container">
-      <header className="profile-header">
-        <div className="header-content">
-          <Link href="/" className="back-link">
-            <ArrowLeft size={20} />
-            Back
-          </Link>
-          <h1>Profile</h1>
-          <Link href="/" className="home-link">
-            <Home size={20} />
-          </Link>
-        </div>
-      </header>
+    <>
+      <MobileHeader
+        title="Profile"
+        subtitle={session.user.name}
+      />
 
-      <main className="profile-main">
-        <div className="profile-card">
-          <div className="profile-icon">
+      <MobileContainer>
+        {/* Profile Info Card */}
+        <MobileCard padding="large" className="profile-info-card">
+          <div className="profile-avatar">
             <User size={64} strokeWidth={1.5} />
           </div>
-          <h2>{session.user.name}</h2>
+          <h2 className="profile-name">{session.user.name}</h2>
           <p className="profile-email">{session.user.email}</p>
-          <div className="profile-badge">
+          <div className="profile-role-badge">
             <Shield size={16} />
-            {session.user.role}
+            <span>{session.user.role}</span>
           </div>
-        </div>
+        </MobileCard>
 
+        {/* Player Statistics */}
         {loading ? (
-          <div className="stats-loading">Loading statistics...</div>
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading statistics...</p>
+          </div>
         ) : stats ? (
           <>
-            <div className="stats-section">
-              <h3>Player Statistics</h3>
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <Target size={32} />
-                  </div>
-                  <div className="stat-value">{stats.goals}</div>
-                  <div className="stat-label">Goals Scored</div>
-                </div>
+            <div className="mobile-section">
+              <div className="mobile-section-header">
+                <h2 className="mobile-section-title">Statistics</h2>
+              </div>
 
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <Trophy size={32} />
+              <div className="stats-grid-ios">
+                <MobileCard padding="medium" className="stat-card-ios">
+                  <div className="stat-icon-ios">
+                    <Target size={24} className="stat-icon-color-green" />
                   </div>
-                  <div className="stat-value">{stats.assists}</div>
-                  <div className="stat-label">Assists</div>
-                </div>
+                  <div className="stat-info-ios">
+                    <div className="stat-value-ios">{stats.goals}</div>
+                    <div className="stat-label-ios">Goals</div>
+                  </div>
+                </MobileCard>
 
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <Calendar size={32} />
+                <MobileCard padding="medium" className="stat-card-ios">
+                  <div className="stat-icon-ios">
+                    <Trophy size={24} className="stat-icon-color-blue" />
                   </div>
-                  <div className="stat-value">{stats.matchesPlayed}</div>
-                  <div className="stat-label">Matches Played</div>
-                </div>
+                  <div className="stat-info-ios">
+                    <div className="stat-value-ios">{stats.assists}</div>
+                    <div className="stat-label-ios">Assists</div>
+                  </div>
+                </MobileCard>
 
-                <div className="stat-card">
-                  <div className="stat-icon">
-                    <Users size={32} />
+                <MobileCard padding="medium" className="stat-card-ios">
+                  <div className="stat-icon-ios">
+                    <Calendar size={24} className="stat-icon-color-blue" />
                   </div>
-                  <div className="stat-value">{stats.teams}</div>
-                  <div className="stat-label">Teams</div>
-                </div>
+                  <div className="stat-info-ios">
+                    <div className="stat-value-ios">{stats.matchesPlayed}</div>
+                    <div className="stat-label-ios">Matches</div>
+                  </div>
+                </MobileCard>
+
+                <MobileCard padding="medium" className="stat-card-ios">
+                  <div className="stat-icon-ios">
+                    <Users size={24} className="stat-icon-color-blue" />
+                  </div>
+                  <div className="stat-info-ios">
+                    <div className="stat-value-ios">{stats.teams}</div>
+                    <div className="stat-label-ios">Teams</div>
+                  </div>
+                </MobileCard>
               </div>
             </div>
 
-            <div className="cards-section">
-              <h3>Disciplinary Record</h3>
-              <div className="cards-grid">
-                <div className="card-box yellow-card">
-                  <div className="card-count">{stats.yellowCards}</div>
-                  <div className="card-label">Yellow Cards</div>
-                </div>
-                <div className="card-box red-card">
-                  <div className="card-count">{stats.redCards}</div>
-                  <div className="card-label">Red Cards</div>
-                </div>
+            {/* Disciplinary Record */}
+            <div className="mobile-section">
+              <div className="mobile-section-header">
+                <h2 className="mobile-section-title">Disciplinary Record</h2>
+              </div>
+
+              <div className="cards-grid-ios">
+                <MobileCard padding="medium" className="card-stat-yellow">
+                  <div className="card-stat-value">{stats.yellowCards}</div>
+                  <div className="card-stat-label">Yellow Cards</div>
+                </MobileCard>
+
+                <MobileCard padding="medium" className="card-stat-red">
+                  <div className="card-stat-value">{stats.redCards}</div>
+                  <div className="card-stat-label">Red Cards</div>
+                </MobileCard>
               </div>
             </div>
           </>
         ) : (
-          <div className="no-stats">
-            <p>No statistics available yet</p>
+          <div className="mobile-empty-state">
+            <div className="mobile-empty-icon">
+              <Trophy size={64} />
+            </div>
+            <h3 className="mobile-empty-title">No Statistics Yet</h3>
+            <p className="mobile-empty-description">
+              Play your first match to see your stats
+            </p>
           </div>
         )}
 
-        <div className="actions-section">
-          <Link href="/league" className="action-button">
-            <Trophy size={20} />
-            View League Table
-          </Link>
-          {session.user.role === 'ADMIN' && (
-            <Link href="/admin" className="action-button admin">
-              <Shield size={20} />
-              Admin Dashboard
-            </Link>
-          )}
+        {/* Actions Section */}
+        <div className="mobile-section">
+          <MobileCard padding="none">
+            <div className="action-list">
+              <Link href="/league" className="action-item">
+                <div className="action-icon-wrapper">
+                  <Trophy size={20} />
+                </div>
+                <span className="action-text">View League Table</span>
+                <ChevronRight size={20} className="action-chevron" />
+              </Link>
+
+              {session.user.role === 'ADMIN' && (
+                <Link href="/admin" className="action-item">
+                  <div className="action-icon-wrapper admin-icon">
+                    <Shield size={20} />
+                  </div>
+                  <span className="action-text">Admin Dashboard</span>
+                  <ChevronRight size={20} className="action-chevron" />
+                </Link>
+              )}
+
+              <button onClick={handleSignOut} className="action-item action-button-logout">
+                <div className="action-icon-wrapper logout-icon">
+                  <LogOut size={20} />
+                </div>
+                <span className="action-text">Sign Out</span>
+                <ChevronRight size={20} className="action-chevron" />
+              </button>
+            </div>
+          </MobileCard>
         </div>
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

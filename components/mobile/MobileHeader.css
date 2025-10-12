@@ -1,37 +1,40 @@
 .mobile-header {
   position: sticky;
   top: 0;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  z-index: 100;
-  padding-top: max(0.5rem, env(safe-area-inset-top));
+  /* iOS navigation bar frosted glass */
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding-top: max(8px, env(safe-area-inset-top));
 }
 
 .mobile-header-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
-  min-height: 44px;
+  padding: 0 16px; /* iOS standard padding */
+  height: 44px; /* Fixed iOS nav bar height */
 }
 
 .mobile-header-back {
   background: none;
   border: none;
-  color: #e90052;
+  color: #007AFF; /* iOS system blue */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 8px;
   min-width: 44px;
   min-height: 44px;
   cursor: pointer;
-  border-radius: 50%;
-  transition: background 0.2s;
+  transition: opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-header-back:active {
-  background: rgba(233, 0, 82, 0.1);
+  opacity: 0.3; /* iOS button press feedback */
 }
 
 .mobile-header-spacer {
@@ -45,28 +48,35 @@
 }
 
 .mobile-header-content {
-  padding: 0 1rem 1rem;
+  padding: 0 16px 12px;
 }
 
 .mobile-header.large .mobile-header-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #1e1e1e;
+  font-size: 28px; /* Compact title */
+  font-weight: 700;
+  color: #000000;
   margin: 0;
   line-height: 1.2;
+  letter-spacing: 0.364px;
 }
 
 .mobile-header:not(.large) .mobile-header-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1e1e1e;
+  font-size: 17px; /* iOS inline title */
+  font-weight: 600;
+  color: #000000;
   margin: 0;
+  letter-spacing: -0.408px;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .mobile-header-subtitle {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0.25rem 0 0 0;
+  font-size: 13px; /* iOS footnote size */
+  color: #8E8E93; /* iOS secondary label */
+  margin: 2px 0 0 0;
+  letter-spacing: -0.078px;
 }
 
 /* Hide on desktop */

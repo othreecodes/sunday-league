@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Calendar, MapPin, Clock, Trophy, RefreshCw, Filter } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
@@ -33,8 +33,11 @@ interface Match {
   }
 }
 
-export default function Matches() {
+function MatchesContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const teamFilter = searchParams.get('team')
+
   const [seasons, setSeasons] = useState<Season[]>([])
   const [selectedSeason, setSelectedSeason] = useState<string>('')
   const [matches, setMatches] = useState<Match[]>([])
@@ -42,6 +45,7 @@ export default function Matches() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [teamName, setTeamName] = useState<string>('')
 
   useEffect(() => {
     fetchSeasons()
@@ -97,6 +101,22 @@ export default function Matches() {
     const selectedSeasonData = seasons.find(s => s.id === selectedSeason)
     if (selectedSeasonData) {
       filtered = filtered.filter(m => m.season.name === selectedSeasonData.name)
+    }
+
+    // Filter by team (if team parameter is present)
+    if (teamFilter) {
+      filtered = filtered.filter(m =>
+        m.homeGroup.id === teamFilter || m.awayGroup.id === teamFilter
+      )
+
+      // Set team name for display
+      if (filtered.length > 0) {
+        const match = filtered[0]
+        const name = match.homeGroup.id === teamFilter
+          ? match.homeGroup.name
+          : match.awayGroup.name
+        setTeamName(name)
+      }
     }
 
     // Filter by status
@@ -228,12 +248,30 @@ export default function Matches() {
               <div className="mobile-section">
                 <div className="mobile-section-header">
                   <h2 className="mobile-section-title">
-                    {statusFilter === 'all' && 'All Matches'}
-                    {statusFilter === 'SCHEDULED' && 'Upcoming Matches'}
-                    {statusFilter === 'IN_PROGRESS' && 'Live Matches'}
-                    {statusFilter === 'COMPLETED' && 'Completed Matches'}
+                    {teamFilter ? (
+                      <span>
+                        {teamName || 'Team'} Matches
+                      </span>
+                    ) : (
+                      <>
+                        {statusFilter === 'all' && 'All Matches'}
+                        {statusFilter === 'SCHEDULED' && 'Upcoming Matches'}
+                        {statusFilter === 'IN_PROGRESS' && 'Live Matches'}
+                        {statusFilter === 'COMPLETED' && 'Completed Matches'}
+                      </>
+                    )}
                   </h2>
-                  <span className="match-count">{filteredMatches.length}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {teamFilter && (
+                      <button
+                        onClick={() => router.push('/matches')}
+                        className="clear-filter-btn"
+                      >
+                        Clear
+                      </button>
+                    )}
+                    <span className="match-count">{filteredMatches.length}</span>
+                  </div>
                 </div>
 
                 <div className="mobile-card-list">
@@ -307,5 +345,18 @@ export default function Matches() {
         )}
       </MobileContainer>
     </>
+  )
+}
+
+export default function Matches() {
+  return (
+    <Suspense fallback={
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
+      </div>
+    }>
+      <MatchesContent />
+    </Suspense>
   )
 }

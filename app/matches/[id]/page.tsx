@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { Calendar, MapPin, Clock, ChevronLeft, AlertCircle } from 'lucide-react'
+import { Calendar, MapPin, Clock, ChevronLeft, AlertCircle, Target } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
@@ -18,6 +18,14 @@ interface Card {
   cardType: 'YELLOW' | 'RED'
   minute: number
   user: User
+  groupId: string
+}
+
+interface Goal {
+  id: string
+  minute: number
+  scorer: User
+  assist: User | null
   groupId: string
 }
 
@@ -42,6 +50,7 @@ interface Match {
     id: string
     name: string
   }
+  goals: Goal[]
   cards: Card[]
 }
 
@@ -109,6 +118,15 @@ export default function MatchDetail() {
   const getCardsByGroup = (groupId: string) => {
     if (!match) return []
     return match.cards.filter(card => card.groupId === groupId)
+  }
+
+  const hasSecondYellow = (card: Card, cardIndex: number) => {
+    if (card.cardType !== 'YELLOW') return false
+    // Check if this player has another yellow card before this one
+    const previousCards = match!.cards.slice(0, cardIndex)
+    return previousCards.some(c =>
+      c.userId === card.userId && c.cardType === 'YELLOW'
+    )
   }
 
   if (loading) {
@@ -240,6 +258,47 @@ export default function MatchDetail() {
           </div>
         </MobileCard>
 
+        {/* Goals Section */}
+        {match.goals.length > 0 && (
+          <div className="mobile-section">
+            <div className="mobile-section-header">
+              <h2 className="mobile-section-title">
+                <Target size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                Goals
+              </h2>
+              <span className="match-count">{match.goals.length}</span>
+            </div>
+
+            <MobileCard padding="none">
+              <div className="events-list">
+                {match.goals.map((goal) => {
+                  const isHome = goal.groupId === match.homeGroup.id
+                  return (
+                    <div
+                      key={goal.id}
+                      className={`event-item goal-event ${!isHome ? 'away-event' : ''}`}
+                    >
+                      <div className="event-minute">{goal.minute}'</div>
+                      <div className="event-icon">
+                        <Target size={20} className="goal-icon" />
+                      </div>
+                      <div className="event-details">
+                        <span className="event-player">{goal.scorer.name}</span>
+                        {goal.assist && (
+                          <span className="event-secondary">Assist: {goal.assist.name}</span>
+                        )}
+                        <span className="event-team">
+                          {isHome ? match.homeGroup.name : match.awayGroup.name}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </MobileCard>
+          </div>
+        )}
+
         {/* Cards Section */}
         {match.cards.length > 0 && (
           <div className="mobile-section">
@@ -253,20 +312,30 @@ export default function MatchDetail() {
 
             <MobileCard padding="none">
               <div className="events-list">
-                {match.cards.map((card) => {
+                {match.cards.map((card, index) => {
                   const isHome = card.groupId === match.homeGroup.id
+                  const isSecondYellow = hasSecondYellow(card, index)
                   return (
                     <div
                       key={card.id}
-                      className={`event-item card-event ${card.cardType?.toLowerCase() || 'unknown'}-card ${!isHome ? 'away-event' : ''}`}
+                      className={`event-item card-event ${card.cardType?.toLowerCase() || 'unknown'}-card ${isSecondYellow ? 'red-card' : ''} ${!isHome ? 'away-event' : ''}`}
                     >
                       <div className="event-minute">{card.minute}'</div>
                       <div className="event-icon">
-                        <div className={`card-icon ${card.cardType?.toLowerCase() || 'unknown'}`}></div>
+                        <div className={`card-icon ${isSecondYellow ? 'red' : card.cardType?.toLowerCase() || 'unknown'}`}></div>
                       </div>
                       <div className="event-details">
                         <span className="event-player">{card.user.name}</span>
-                        <span className="event-secondary">{card.cardType || 'Unknown'} Card</span>
+                        <span className="event-secondary">
+                          {isSecondYellow ? (
+                            <>
+                              <span style={{ color: '#dc2626', fontWeight: 700 }}>SECOND YELLOW</span>
+                              {' → RED CARD (Sent Off)'}
+                            </>
+                          ) : (
+                            `${card.cardType || 'Unknown'} Card`
+                          )}
+                        </span>
                         <span className="event-team">
                           {isHome ? match.homeGroup.name : match.awayGroup.name}
                         </span>

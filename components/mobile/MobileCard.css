@@ -1,21 +1,22 @@
 .mobile-card {
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 13px; /* iOS grouped list corner radius */
+  box-shadow: none;
   overflow: hidden;
-  border: none;
+  border: 0.5px solid rgba(0, 0, 0, 0.04);
   text-align: left;
   width: 100%;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.1s ease-out, opacity 0.15s ease;
 }
 
 .mobile-card.clickable {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-card.clickable:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transform: scale(0.97);
+  opacity: 0.9;
 }
 
 .mobile-card.padding-none {
@@ -23,15 +24,15 @@
 }
 
 .mobile-card.padding-small {
-  padding: 0.75rem;
+  padding: 12px;
 }
 
 .mobile-card.padding-medium {
-  padding: 1rem;
+  padding: 16px; /* iOS standard padding */
 }
 
 .mobile-card.padding-large {
-  padding: 1.5rem;
+  padding: 20px;
 }
 
 /* Card sections */
@@ -39,56 +40,62 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 12px;
 }
 
 .card-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #1e1e1e;
+  font-size: 17px; /* iOS body */
+  font-weight: 600;
+  color: #000000;
   margin: 0;
+  letter-spacing: -0.408px;
 }
 
 .card-subtitle {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0.25rem 0 0 0;
+  font-size: 13px; /* iOS footnote */
+  color: #8E8E93;
+  margin: 4px 0 0 0;
+  letter-spacing: -0.078px;
 }
 
 .card-body {
-  color: #1f2937;
+  color: #000000;
+  font-size: 17px;
+  letter-spacing: -0.408px;
 }
 
 .card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.29); /* iOS separator */
 }
 
 .card-divider {
-  height: 1px;
-  background: #e5e7eb;
-  margin: 0.75rem 0;
+  height: 0.5px;
+  background: rgba(60, 60, 67, 0.29); /* iOS separator */
+  margin: 12px 0;
 }
 
 .card-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  padding: 8px 0;
 }
 
 .card-label {
-  font-size: 0.875rem;
-  color: #6b7280;
-  font-weight: 500;
+  font-size: 15px; /* iOS subheadline */
+  color: #8E8E93; /* iOS secondary label */
+  font-weight: 400;
+  letter-spacing: -0.24px;
 }
 
 .card-value {
-  font-size: 1rem;
-  color: #1e1e1e;
+  font-size: 17px; /* iOS body */
+  color: #000000;
   font-weight: 600;
+  letter-spacing: -0.408px;
 }
