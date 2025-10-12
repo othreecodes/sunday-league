@@ -39,6 +39,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
 }
 
 .seasons-actions {
