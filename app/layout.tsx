@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import MobileNav from "@/components/MobileNav";
 
 export const metadata: Metadata = {
   title: "Cowrywise FC - Sunday League Manager",
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Cowrywise FC"
   },
   formatDetection: {
@@ -21,7 +22,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#1e40af"
+  themeColor: "#e90052",
+  viewportFit: "cover"
 };
 
 export default function RootLayout({
@@ -38,6 +40,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Providers>
           {children}
+          <MobileNav />
         </Providers>
       </body>
     </html>

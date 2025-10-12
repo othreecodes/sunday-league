@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#1e40af",
+  "theme_color": "#e90052",
   "orientation": "portrait",
   "icons": [
     {
@@ -22,5 +22,46 @@
     }
   ],
   "categories": ["sports", "utilities"],
-  "screenshots": []
+  "screenshots": [],
+  "display_override": ["window-controls-overlay", "standalone"],
+  "scope": "/",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "League Table",
+      "short_name": "League",
+      "description": "View league standings",
+      "url": "/league",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Matches",
+      "short_name": "Matches",
+      "description": "View upcoming matches",
+      "url": "/matches",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "short_name": "Admin",
+      "description": "Admin dashboard",
+      "url": "/admin",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
 }

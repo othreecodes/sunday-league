@@ -33,7 +33,7 @@ interface Goal {
 interface Card {
   id: string
   userId: string
-  type: string
+  cardType: string
   minute: number
   reason: string | null
   user: User
@@ -444,8 +444,8 @@ export default function RecordMatchPage() {
                   <div key={card.id} className="event-item">
                     <div className="event-info">
                       <span className="event-minute">{card.minute}'</span>
-                      <span className={`card-badge card-${card.type.toLowerCase()}`}>
-                        {card.type}
+                      <span className={`card-badge card-${card.cardType?.toLowerCase() || 'unknown'}`}>
+                        {card.cardType || 'Unknown'}
                       </span>
                       <span className="event-player">{card.user.name}</span>
                       {card.reason && (

@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, FileText, Trash2, Edit2, Play, CheckCircle, Grid3x3, List } from 'lucide-react'
+import { ChevronLeft, Plus, FileText, Trash2, Edit2, Play, CheckCircle, LayoutGrid, List } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './matches.css'
 
 interface Season {
@@ -49,7 +52,9 @@ export default function MatchesPage() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [filterSeasonId, setFilterSeasonId] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<'cards' | 'list'>('cards')
+  const [filterTeamId, setFilterTeamId] = useState<string>('all')
+  const [allGroups, setAllGroups] = useState<Group[]>([])
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   useEffect(() => {
     if (status === 'loading') return
@@ -73,6 +78,15 @@ export default function MatchesPage() {
       if (seasonsRes.ok) {
         const seasonsData = await seasonsRes.json()
         setSeasons(seasonsData)
+
+        // Collect all groups from all seasons
+        const allGroupsData: Group[] = []
+        seasonsData.forEach((season: any) => {
+          if (season.groups) {
+            allGroupsData.push(...season.groups)
+          }
+        })
+        setAllGroups(allGroupsData)
 
         // Set default season to active one
         const activeSeason = seasonsData.find((s: Season) => s.isActive)
@@ -192,80 +206,118 @@ export default function MatchesPage() {
     )
   }
 
-  const filteredMatches = filterSeasonId === 'all'
-    ? matches
-    : matches.filter(m => m.season.name === seasons.find(s => s.id === filterSeasonId)?.name)
+  let filteredMatches = matches
+
+  // Filter by season
+  if (filterSeasonId !== 'all') {
+    const seasonName = seasons.find(s => s.id === filterSeasonId)?.name
+    filteredMatches = filteredMatches.filter(m => m.season.name === seasonName)
+  }
+
+  // Filter by team
+  if (filterTeamId !== 'all') {
+    filteredMatches = filteredMatches.filter(m =>
+      m.homeGroup.id === filterTeamId || m.awayGroup.id === filterTeamId
+    )
+  }
 
   if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="matches-container">
-      <header className="matches-header">
-        <Link href="/admin" className="back-link">
-          <ArrowLeft size={20} /> Back to Admin
-        </Link>
-        <h1><FileText size={28} className="inline-icon" /> Matches Management</h1>
-      </header>
-
-      <main className="matches-main">
-        <div className="matches-actions">
+    <>
+      <MobileHeader
+        title="Matches"
+        subtitle="Manage all matches"
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+        rightAction={
           <button
-            className="btn-primary"
+            className="add-btn"
             onClick={() => setShowForm(!showForm)}
             disabled={seasons.length === 0}
           >
-            <Plus size={20} /> {showForm ? 'Cancel' : 'Schedule New Match'}
+            <Plus size={20} />
           </button>
-          {seasons.length === 0 && (
-            <p className="warning-text">Please create a season and groups first</p>
-          )}
-        </div>
+        }
+      />
 
-        <div className="filter-controls">
-          <div className="filter-group">
-            <label htmlFor="seasonFilter">Filter by Season:</label>
-            <select
-              id="seasonFilter"
-              value={filterSeasonId}
-              onChange={(e) => setFilterSeasonId(e.target.value)}
-              className="filter-select"
-            >
-              <option value="all">All Seasons</option>
-              {seasons.map((season) => (
-                <option key={season.id} value={season.id}>
-                  {season.name} {season.isActive ? '(Active)' : ''}
-                </option>
-              ))}
-            </select>
+      <MobileContainer>
+        {/* Warning if no seasons */}
+        {seasons.length === 0 && (
+          <div className="mobile-warning">
+            <p>Please create a season and groups first</p>
           </div>
+        )}
 
-          <div className="view-switcher">
-            <button
-              className={`view-btn ${viewMode === 'cards' ? 'active' : ''}`}
-              onClick={() => setViewMode('cards')}
-              title="Card View"
-            >
-              <Grid3x3 size={20} />
-            </button>
-            <button
-              className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
-              title="List View"
-            >
-              <List size={20} />
-            </button>
+        {/* Filter and View Toggle */}
+        <MobileCard padding="medium" className="filter-card">
+          <div className="filter-container">
+            <div className="filter-row">
+              <div className="filter-select-wrapper">
+                <label className="filter-label">Season</label>
+                <select
+                  value={filterSeasonId}
+                  onChange={(e) => setFilterSeasonId(e.target.value)}
+                  className="season-filter-select"
+                >
+                  <option value="all">All Seasons</option>
+                  {seasons.map((season) => (
+                    <option key={season.id} value={season.id}>
+                      {season.name} {season.isActive ? '⭐' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="filter-select-wrapper">
+                <label className="filter-label">Team</label>
+                <select
+                  value={filterTeamId}
+                  onChange={(e) => setFilterTeamId(e.target.value)}
+                  className="team-filter-select"
+                >
+                  <option value="all">All Teams</option>
+                  {allGroups.map((group) => (
+                    <option key={group.id} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="view-toggle">
+              <button
+                className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+                onClick={() => setViewMode('list')}
+                aria-label="List view"
+              >
+                <List size={20} />
+              </button>
+              <button
+                className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                onClick={() => setViewMode('grid')}
+                aria-label="Grid view"
+              >
+                <LayoutGrid size={20} />
+              </button>
+            </div>
           </div>
-        </div>
+        </MobileCard>
 
         {showForm && (
-          <div className="match-form-card">
-            <h2>Schedule New Match</h2>
+          <MobileCard padding="large" className="match-form-card">
+            <h2 className="form-title">Schedule New Match</h2>
             <form onSubmit={handleSubmit} className="match-form">
               <div className="form-group">
                 <label htmlFor="seasonId">Season</label>
@@ -350,22 +402,84 @@ export default function MatchesPage() {
                 {submitting ? 'Scheduling...' : 'Schedule Match'}
               </button>
             </form>
-          </div>
+          </MobileCard>
         )}
 
-        <div className="matches-list">
-          {loading ? (
-            <div className="loading">Loading matches...</div>
-          ) : filteredMatches.length === 0 ? (
-            <div className="empty-state">
-              <FileText size={48} />
-              <h3>{matches.length === 0 ? 'No Matches Yet' : 'No Matches Found'}</h3>
-              <p>{matches.length === 0 ? 'Schedule your first match to get started' : 'No matches found for the selected filter'}</p>
+        {/* Matches List */}
+        {loading ? (
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading matches...</p>
+          </div>
+        ) : filteredMatches.length === 0 ? (
+          <div className="mobile-empty-state">
+            <div className="mobile-empty-icon">
+              <FileText size={64} />
             </div>
-          ) : viewMode === 'cards' ? (
-            <div className="matches-grid">
-              {filteredMatches.map((match) => (
-                <div key={match.id} className="match-card">
+            <h3 className="mobile-empty-title">
+              {matches.length === 0 ? 'No Matches Yet' : 'No Matches Found'}
+            </h3>
+            <p className="mobile-empty-description">
+              {matches.length === 0 ? 'Schedule your first match to get started' : 'No matches found for the selected filter'}
+            </p>
+          </div>
+        ) : viewMode === 'list' ? (
+          <MobileCard padding="none" className="matches-table-card">
+            <div className="matches-table-wrapper">
+              <table className="matches-table">
+                <thead>
+                  <tr>
+                    <th className="col-teams">Match</th>
+                    <th className="col-date">Date</th>
+                    <th className="col-status">Status</th>
+                    <th className="col-actions">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMatches.map((match) => (
+                    <tr key={match.id} className="table-row">
+                      <td className="col-teams">
+                        <div className="match-teams-table">
+                          <span className="team-name-table">{match.homeGroup.name}</span>
+                          <span className="score-table">{match.homeScore} - {match.awayScore}</span>
+                          <span className="team-name-table">{match.awayGroup.name}</span>
+                        </div>
+                        <span className="season-badge-small">{match.season.name}</span>
+                      </td>
+                      <td className="col-date">
+                        <span className="date-text">{new Date(match.matchDate).toLocaleDateString()}</span>
+                      </td>
+                      <td className="col-status">{getStatusBadge(match.status)}</td>
+                      <td className="col-actions">
+                        <div className="actions-group">
+                          {match.status !== 'COMPLETED' && (
+                            <Link href={`/admin/matches/${match.id}/record`} className="action-btn btn-record">
+                              <Edit2 size={16} />
+                            </Link>
+                          )}
+                          <Link href={`/admin/matches/${match.id}`} className="action-btn btn-view">
+                            <FileText size={16} />
+                          </Link>
+                          <button
+                            className="action-btn btn-delete"
+                            onClick={() => deleteMatch(match.id)}
+                            title="Delete match"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </MobileCard>
+        ) : (
+          <div className="mobile-card-list">
+            {filteredMatches.map((match) => (
+              <MobileCard key={match.id} padding="medium">
+                <div className="match-card">
                   <div className="match-header">
                     {getStatusBadge(match.status)}
                     <span className="season-badge">{match.season.name}</span>
@@ -386,7 +500,7 @@ export default function MatchesPage() {
                   <div className="match-info">
                     <div className="info-item">
                       <span className="info-label">Date:</span>
-                      <span>{new Date(match.matchDate).toLocaleString()}</span>
+                      <span>{new Date(match.matchDate).toLocaleDateString()}</span>
                     </div>
                     {match.location && (
                       <div className="info-item">
@@ -398,76 +512,30 @@ export default function MatchesPage() {
 
                   <div className="match-actions">
                     {match.status !== 'COMPLETED' && (
-                      <Link href={`/admin/matches/${match.id}/record`} className="btn-icon btn-record">
+                      <Link href={`/admin/matches/${match.id}/record`} className="btn-action btn-record">
                         <Edit2 size={18} />
                         Record Result
                       </Link>
                     )}
-                    <Link href={`/admin/matches/${match.id}`} className="btn-icon btn-view">
+                    <Link href={`/admin/matches/${match.id}`} className="btn-action btn-view">
                       <FileText size={18} />
                       View Details
                     </Link>
                     <button
-                      className="btn-icon btn-delete"
+                      className="btn-action btn-delete"
                       onClick={() => deleteMatch(match.id)}
                       title="Delete match"
                     >
                       <Trash2 size={18} />
+                      Delete
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="matches-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Season</th>
-                    <th>Home Team</th>
-                    <th>Score</th>
-                    <th>Away Team</th>
-                    <th>Date</th>
-                    <th>Venue</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredMatches.map((match) => (
-                    <tr key={match.id}>
-                      <td><span className="season-badge">{match.season.name}</span></td>
-                      <td>{match.homeGroup.name}</td>
-                      <td className="score-cell">{match.homeScore} - {match.awayScore}</td>
-                      <td>{match.awayGroup.name}</td>
-                      <td>{new Date(match.matchDate).toLocaleString()}</td>
-                      <td>{match.location || '-'}</td>
-                      <td>{getStatusBadge(match.status)}</td>
-                      <td className="actions-cell">
-                        {match.status !== 'COMPLETED' && (
-                          <Link href={`/admin/matches/${match.id}/record`} className="btn-icon btn-record">
-                            <Edit2 size={16} />
-                          </Link>
-                        )}
-                        <Link href={`/admin/matches/${match.id}`} className="btn-icon btn-view">
-                          <FileText size={16} />
-                        </Link>
-                        <button
-                          className="btn-icon btn-delete"
-                          onClick={() => deleteMatch(match.id)}
-                          title="Delete match"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+              </MobileCard>
+            ))}
+          </div>
+        )}
+      </MobileContainer>
+    </>
   )
 }

@@ -1,0 +1,62 @@
+.fab {
+  position: fixed;
+  bottom: calc(70px + env(safe-area-inset-bottom));
+  right: 1rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 50;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.fab-primary {
+  background: #e90052;
+  color: white;
+}
+
+.fab-secondary {
+  background: #1e1e1e;
+  color: white;
+}
+
+.fab:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.fab:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.fab-extended {
+  width: auto;
+  padding: 0 1.5rem;
+  border-radius: 28px;
+}
+
+.fab-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-label {
+  white-space: nowrap;
+}
+
+/* Hide on desktop */
+@media (min-width: 768px) {
+  .fab {
+    display: none;
+  }
+}

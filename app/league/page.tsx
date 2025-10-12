@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import Link from 'next/link'
-import { Trophy, Home, User, Shield, Target, Award, Calendar } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Trophy, Target, Award, Calendar, RefreshCw, LayoutGrid, List } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './league.css'
 
 interface LeagueTableEntry {
@@ -35,14 +37,17 @@ interface Season {
   isActive: boolean
 }
 
+type ViewMode = 'list' | 'grid'
+
 export default function League() {
-  const { data: session } = useSession()
+  const router = useRouter()
   const [seasons, setSeasons] = useState<Season[]>([])
   const [selectedSeason, setSelectedSeason] = useState<string>('')
   const [table, setTable] = useState<LeagueTableEntry[]>([])
   const [topScorers, setTopScorers] = useState<PlayerStats[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [viewMode, setViewMode] = useState<ViewMode>('list')
 
   useEffect(() => {
     fetchSeasons()
@@ -89,160 +94,256 @@ export default function League() {
     }
   }
 
-  return (
-    <div className="league-container">
-      <header className="league-header">
-        <div className="header-content">
-          <div className="header-title">
-            <Trophy size={32} />
-            <h1>League Table</h1>
-          </div>
-          <nav className="header-nav">
-            <Link href="/" className="nav-link">
-              <Home size={18} />
-              Home
-            </Link>
-            {session ? (
-              <>
-                <Link href="/profile" className="nav-link">
-                  <User size={18} />
-                  Profile
-                </Link>
-                {session.user.role === 'ADMIN' && (
-                  <Link href="/admin" className="nav-link">
-                    <Shield size={18} />
-                    Admin
-                  </Link>
-                )}
-              </>
-            ) : (
-              <Link href="/auth/signin" className="nav-link">Sign In</Link>
-            )}
-          </nav>
-        </div>
-      </header>
+  const handleRefresh = () => {
+    if (selectedSeason) {
+      fetchLeagueData()
+    }
+  }
 
-      <main className="league-main">
-        {seasons.length > 0 && (
-          <div className="season-selector">
-            <Calendar size={20} />
-            <label htmlFor="season">Season:</label>
-            <select
-              id="season"
-              value={selectedSeason}
-              onChange={(e) => setSelectedSeason(e.target.value)}
-            >
-              {seasons.map((season) => (
-                <option key={season.id} value={season.id}>
-                  {season.name} {season.isActive && '(Current)'}
-                </option>
-              ))}
-            </select>
-          </div>
+  const selectedSeasonData = seasons.find(s => s.id === selectedSeason)
+
+  return (
+    <>
+      <MobileHeader
+        title="League"
+        subtitle={selectedSeasonData?.name}
+        rightAction={
+          <button onClick={handleRefresh} className="refresh-btn" disabled={loading}>
+            <RefreshCw size={20} className={loading ? 'spinning' : ''} />
+          </button>
+        }
+      />
+
+      <MobileContainer>
+        {/* Season Selector */}
+        {seasons.length > 1 && (
+          <MobileCard padding="medium" className="season-selector-card">
+            <div className="season-selector-content">
+              <Calendar size={20} />
+              <select
+                value={selectedSeason}
+                onChange={(e) => setSelectedSeason(e.target.value)}
+                className="season-select"
+              >
+                {seasons.map((season) => (
+                  <option key={season.id} value={season.id}>
+                    {season.name} {season.isActive && '⭐'}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </MobileCard>
         )}
 
         {error && (
-          <div className="error-box">
-            {error}
-          </div>
+          <div className="mobile-error-message">{error}</div>
         )}
 
         {loading ? (
-          <div className="loading">Loading...</div>
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading league data...</p>
+          </div>
         ) : (
           <>
-            <section className="table-section">
-              <h2>Standings</h2>
+            {/* Standings Section */}
+            <div className="mobile-section">
+              <div className="mobile-section-header">
+                <h2 className="mobile-section-title">Standings</h2>
+                <div className="view-toggle">
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+                    aria-label="List view"
+                  >
+                    <List size={20} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    aria-label="Grid view"
+                  >
+                    <LayoutGrid size={20} />
+                  </button>
+                </div>
+              </div>
 
               {table.length === 0 ? (
-                <div className="empty-state">
-                  <Trophy size={48} />
-                  <p>No matches played yet this season</p>
+                <div className="mobile-empty-state">
+                  <div className="mobile-empty-icon">
+                    <Trophy size={64} />
+                  </div>
+                  <h3 className="mobile-empty-title">No matches played yet</h3>
+                  <p className="mobile-empty-description">
+                    The league table will appear once matches are played
+                  </p>
                 </div>
-              ) : (
-                <div className="table-wrapper">
-                  <table className="league-table">
-                    <thead>
-                      <tr>
-                        <th>Pos</th>
-                        <th>Team</th>
-                        <th>P</th>
-                        <th>W</th>
-                        <th>D</th>
-                        <th>L</th>
-                        <th>GF</th>
-                        <th>GA</th>
-                        <th>GD</th>
-                        <th>Pts</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {table.map((entry, index) => (
-                        <tr key={entry.groupId} className={index === 0 ? 'first-place' : ''}>
-                          <td>{index + 1}</td>
-                          <td className="team-name">{entry.groupName}</td>
-                          <td>{entry.played}</td>
-                          <td>{entry.won}</td>
-                          <td>{entry.drawn}</td>
-                          <td>{entry.lost}</td>
-                          <td>{entry.goalsFor}</td>
-                          <td>{entry.goalsAgainst}</td>
-                          <td className={entry.goalDifference >= 0 ? 'positive' : 'negative'}>
-                            {entry.goalDifference >= 0 ? '+' : ''}{entry.goalDifference}
-                          </td>
-                          <td className="points">{entry.points}</td>
+              ) : viewMode === 'list' ? (
+                <MobileCard padding="none" className="league-table-card">
+                  <div className="league-table-wrapper">
+                    <table className="league-table">
+                      <thead>
+                        <tr>
+                          <th className="col-pos">#</th>
+                          <th className="col-team">Team</th>
+                          <th className="col-stat">P</th>
+                          <th className="col-stat">W</th>
+                          <th className="col-stat">D</th>
+                          <th className="col-stat">L</th>
+                          <th className="col-stat">GD</th>
+                          <th className="col-pts">Pts</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </section>
-
-            <section className="stats-section">
-              <h2>
-                <Award size={24} />
-                Top Scorers
-              </h2>
-
-              {topScorers.length === 0 ? (
-                <div className="empty-state">
-                  <Target size={48} />
-                  <p>No goals scored yet this season</p>
-                </div>
+                      </thead>
+                      <tbody>
+                        {table.map((entry, index) => (
+                          <tr
+                            key={entry.groupId}
+                            onClick={() => router.push(`/groups/${entry.groupId}`)}
+                            className="table-row"
+                          >
+                            <td className="col-pos">
+                              <span className={`position-badge ${index === 0 ? 'first' : ''}`}>
+                                {index + 1}
+                              </span>
+                            </td>
+                            <td className="col-team">
+                              <span className="team-name-table">{entry.groupName}</span>
+                            </td>
+                            <td className="col-stat">{entry.played}</td>
+                            <td className="col-stat">{entry.won}</td>
+                            <td className="col-stat">{entry.drawn}</td>
+                            <td className="col-stat">{entry.lost}</td>
+                            <td className="col-stat">
+                              <span className={entry.goalDifference >= 0 ? 'positive' : 'negative'}>
+                                {entry.goalDifference >= 0 ? '+' : ''}{entry.goalDifference}
+                              </span>
+                            </td>
+                            <td className="col-pts">
+                              <span className="points-badge">{entry.points}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </MobileCard>
               ) : (
-                <div className="scorers-list">
-                  {topScorers.map((player, index) => (
-                    <div key={player.userId} className="scorer-card">
-                      <div className="scorer-rank">{index + 1}</div>
-                      <div className="scorer-info">
-                        <div className="scorer-name">{player.userName}</div>
-                        <div className="scorer-stats">
-                          <span className="stat-item">
-                            <Target size={14} />
-                            {player.goals} goals
-                          </span>
-                          {player.assists > 0 && (
-                            <span className="stat-item">
-                              <Trophy size={14} />
-                              {player.assists} assists
+                <div className="mobile-card-list">
+                  {table.map((entry, index) => (
+                    <MobileCard
+                      key={entry.groupId}
+                      padding="medium"
+                      onClick={() => router.push(`/groups/${entry.groupId}`)}
+                    >
+                      <div className="team-card">
+                        <div className="team-card-header">
+                          <div className="team-position">
+                            <span className={`position-badge ${index === 0 ? 'first' : ''}`}>
+                              {index + 1}
                             </span>
-                          )}
-                          <span className="stat-item">
-                            <Calendar size={14} />
-                            {player.matchesPlayed} games
-                          </span>
+                          </div>
+                          <div className="team-info">
+                            <h3 className="team-name">{entry.groupName}</h3>
+                            <p className="team-subtitle">{entry.played} matches played</p>
+                          </div>
+                          <div className="team-points">
+                            <div className="points-value">{entry.points}</div>
+                            <div className="points-label">PTS</div>
+                          </div>
+                        </div>
+                        <div className="team-stats">
+                          <div className="stat-group">
+                            <div className="stat-item">
+                              <span className="stat-label">W</span>
+                              <span className="stat-value">{entry.won}</span>
+                            </div>
+                            <div className="stat-item">
+                              <span className="stat-label">D</span>
+                              <span className="stat-value">{entry.drawn}</span>
+                            </div>
+                            <div className="stat-item">
+                              <span className="stat-label">L</span>
+                              <span className="stat-value">{entry.lost}</span>
+                            </div>
+                          </div>
+                          <div className="stat-group">
+                            <div className="stat-item">
+                              <span className="stat-label">GF</span>
+                              <span className="stat-value">{entry.goalsFor}</span>
+                            </div>
+                            <div className="stat-item">
+                              <span className="stat-label">GA</span>
+                              <span className="stat-value">{entry.goalsAgainst}</span>
+                            </div>
+                            <div className="stat-item">
+                              <span className="stat-label">GD</span>
+                              <span className={`stat-value ${entry.goalDifference >= 0 ? 'positive' : 'negative'}`}>
+                                {entry.goalDifference >= 0 ? '+' : ''}{entry.goalDifference}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="scorer-goals">{player.goals}</div>
-                    </div>
+                    </MobileCard>
                   ))}
                 </div>
               )}
-            </section>
+            </div>
+
+            {/* Top Scorers Section */}
+            <div className="mobile-section">
+              <div className="mobile-section-header">
+                <h2 className="mobile-section-title">
+                  <Award size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                  Top Scorers
+                </h2>
+              </div>
+
+              {topScorers.length === 0 ? (
+                <div className="mobile-empty-state">
+                  <div className="mobile-empty-icon">
+                    <Target size={64} />
+                  </div>
+                  <h3 className="mobile-empty-title">No goals scored yet</h3>
+                  <p className="mobile-empty-description">
+                    Top scorers will appear once goals are recorded
+                  </p>
+                </div>
+              ) : (
+                <div className="mobile-card-list">
+                  {topScorers.map((player, index) => (
+                    <MobileCard key={player.userId} padding="medium">
+                      <div className="scorer-card-mobile">
+                        <div className="scorer-rank-badge">
+                          {index + 1}
+                        </div>
+                        <div className="scorer-details">
+                          <h3 className="scorer-name">{player.userName}</h3>
+                          <div className="scorer-stats-list">
+                            <span className="scorer-stat">
+                              <Target size={14} />
+                              {player.goals} goals
+                            </span>
+                            {player.assists > 0 && (
+                              <span className="scorer-stat">
+                                <Trophy size={14} />
+                                {player.assists} assists
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="scorer-goals-badge">
+                          {player.goals}
+                        </div>
+                      </div>
+                    </MobileCard>
+                  ))}
+                </div>
+              )}
+            </div>
           </>
         )}
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

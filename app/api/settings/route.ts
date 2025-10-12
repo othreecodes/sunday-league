@@ -13,6 +13,7 @@ export async function GET() {
       settings = await prisma.settings.create({
         data: {
           id: 'default-settings',
+          leagueName: 'Cowrywise FC',
           matchesPerSeason: 1
         }
       })
@@ -42,6 +43,16 @@ export async function PATCH(req: Request) {
 
     const data = await req.json()
 
+    // Validate leagueName
+    if (data.leagueName !== undefined) {
+      if (typeof data.leagueName !== 'string' || data.leagueName.trim().length < 1) {
+        return NextResponse.json(
+          { error: "leagueName must be a non-empty string" },
+          { status: 400 }
+        )
+      }
+    }
+
     // Validate matchesPerSeason
     if (data.matchesPerSeason !== undefined) {
       if (typeof data.matchesPerSeason !== 'number' || data.matchesPerSeason < 1 || data.matchesPerSeason > 10) {
@@ -59,6 +70,7 @@ export async function PATCH(req: Request) {
       settings = await prisma.settings.create({
         data: {
           id: 'default-settings',
+          leagueName: data.leagueName || 'Cowrywise FC',
           matchesPerSeason: data.matchesPerSeason || 1
         }
       })

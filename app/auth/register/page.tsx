@@ -3,16 +3,17 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useSettings } from '@/hooks/useSettings'
 import '../signin/signin.css'
 
 export default function Register() {
   const router = useRouter()
+  const { leagueName } = useSettings()
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    nickname: '',
     password: '',
-    confirmPassword: '',
-    phoneNumber: ''
+    confirmPassword: ''
   })
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -51,9 +52,8 @@ export default function Register() {
         },
         body: JSON.stringify({
           name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          phoneNumber: formData.phoneNumber || undefined
+          nickname: formData.nickname,
+          password: formData.password
         })
       })
 
@@ -78,7 +78,7 @@ export default function Register() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>⚽ Cowrywise FC</h1>
+          <h1>⚽ {leagueName}</h1>
           <p>Create your account</p>
         </div>
 
@@ -110,28 +110,15 @@ export default function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="nickname">Username</label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
+              id="nickname"
+              name="nickname"
+              type="text"
+              value={formData.nickname}
               onChange={handleChange}
               required
-              placeholder="your@email.com"
-              disabled={loading || success}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="phoneNumber">Phone Number (Optional)</label>
-            <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              placeholder="+234 XXX XXX XXXX"
+              placeholder="username"
               disabled={loading || success}
             />
           </div>

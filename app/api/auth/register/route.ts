@@ -4,10 +4,10 @@ import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password, phoneNumber } = await req.json()
+    const { name, nickname, password } = await req.json()
 
     // Validation
-    if (!name || !email || !password) {
+    if (!name || !nickname || !password) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -21,14 +21,14 @@ export async function POST(req: Request) {
       )
     }
 
-    // Check if user already exists
+    // Check if user already exists with this nickname
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { nickname }
     })
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "User already exists" },
+        { error: "User with this username already exists" },
         { status: 400 }
       )
     }
@@ -36,18 +36,21 @@ export async function POST(req: Request) {
     // Hash password
     const hashedPassword = await hash(password, 12)
 
+    // Generate a unique email from nickname for NextAuth compatibility
+    const generatedEmail = `${nickname}@cowrywisefc.local`
+
     // Create user
     const user = await prisma.user.create({
       data: {
         name,
-        email,
-        password: hashedPassword,
-        phoneNumber
+        nickname,
+        email: generatedEmail,
+        password: hashedPassword
       },
       select: {
         id: true,
         name: true,
-        email: true,
+        nickname: true,
         role: true,
         createdAt: true
       }
@@ -59,8 +62,9 @@ export async function POST(req: Request) {
     )
   } catch (error) {
     console.error("Registration error:", error)
+    console.error("Error details:", JSON.stringify(error, null, 2))
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }
     )
   }

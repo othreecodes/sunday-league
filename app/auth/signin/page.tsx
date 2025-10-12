@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useSettings } from '@/hooks/useSettings'
 import './signin.css'
 
 export default function SignIn() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const { leagueName } = useSettings()
+  const [nickname, setNickname] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -21,12 +23,12 @@ export default function SignIn() {
     try {
       const result = await signIn('credentials', {
         redirect: false,
-        email,
+        nickname,
         password
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        setError('Invalid username or password')
       } else {
         router.push('/league')
         router.refresh()
@@ -42,7 +44,7 @@ export default function SignIn() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>⚽ Cowrywise FC</h1>
+          <h1>⚽ {leagueName}</h1>
           <p>Sign in to your account</p>
         </div>
 
@@ -54,14 +56,14 @@ export default function SignIn() {
           )}
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="nickname">Username</label>
             <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="nickname"
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
               required
-              placeholder="your@email.com"
+              placeholder="username"
               disabled={loading}
             />
           </div>

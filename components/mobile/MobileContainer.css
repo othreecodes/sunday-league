@@ -1,0 +1,95 @@
+.mobile-container {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-bottom: calc(70px + env(safe-area-inset-bottom));
+}
+
+.mobile-container.padded {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 1rem;
+}
+
+/* Section grouping */
+.mobile-section {
+  margin-bottom: 1.5rem;
+}
+
+.mobile-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding: 0 0.25rem;
+}
+
+.mobile-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e1e1e;
+  margin: 0;
+}
+
+.mobile-section-action {
+  font-size: 0.875rem;
+  color: #e90052;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  min-height: 44px;
+}
+
+.mobile-section-action:active {
+  opacity: 0.7;
+}
+
+/* Card list spacing */
+.mobile-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Grid layout for cards */
+.mobile-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 480px) {
+  .mobile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Empty state */
+.mobile-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.mobile-empty-icon {
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.mobile-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e1e1e;
+  margin: 0 0 0.5rem 0;
+}
+
+.mobile-empty-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 1.5rem 0;
+}

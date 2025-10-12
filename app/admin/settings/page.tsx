@@ -9,6 +9,7 @@ import './settings.css'
 
 interface Settings {
   id: string
+  leagueName: string
   matchesPerSeason: number
 }
 
@@ -18,6 +19,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null)
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
+    leagueName: 'Cowrywise FC',
     matchesPerSeason: 1
   })
   const [submitting, setSubmitting] = useState(false)
@@ -41,7 +43,10 @@ export default function SettingsPage() {
       if (res.ok) {
         const data = await res.json()
         setSettings(data)
-        setFormData({ matchesPerSeason: data.matchesPerSeason })
+        setFormData({
+          leagueName: data.leagueName,
+          matchesPerSeason: data.matchesPerSeason
+        })
       }
     } catch (error) {
       console.error('Error fetching settings:', error)
@@ -107,6 +112,24 @@ export default function SettingsPage() {
             </p>
 
             <form onSubmit={handleSubmit} className="settings-form">
+              <div className="setting-item">
+                <div className="setting-label-group">
+                  <label htmlFor="leagueName">League Name</label>
+                  <p className="setting-description">
+                    The name of your league that will be displayed throughout the application.
+                  </p>
+                </div>
+                <div className="setting-input-group">
+                  <input
+                    type="text"
+                    id="leagueName"
+                    value={formData.leagueName}
+                    onChange={(e) => setFormData({ ...formData, leagueName: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
               <div className="setting-item">
                 <div className="setting-label-group">
                   <label htmlFor="matchesPerSeason">Matches Per Season</label>

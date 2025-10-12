@@ -2,16 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Local Font Definitions */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/InterVariable.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/InterVariable-Italic.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter.ttc') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --primary: #1e40af;
-  --primary-dark: #1e3a8a;
-  --secondary: #10b981;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --background: #ffffff;
-  --surface: #f3f4f6;
-  --text: #1f2937;
-  --text-light: #6b7280;
+  /* iOS System Font Stack */
+  --font-primary: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --font-secondary: 'SF Mono', 'Monaco', 'Menlo', 'Courier New', monospace;
+
+  /* iOS Native Colors */
+  --primary: #000000;
+  --primary-dark: #000000;
+  --accent: #007AFF; /* iOS Blue */
+  --accent-dark: #0051D5;
+  --accent-red: #FF3B30; /* iOS Red for important actions */
+  --secondary: #34C759; /* iOS Green */
+  --danger: #FF3B30;
+  --warning: #FF9500;
+  --background: #F2F2F7; /* iOS System Background */
+  --surface: #ffffff;
+  --surface-secondary: #F2F2F7;
+  --text: #000000;
+  --text-secondary: #3C3C43; /* iOS Secondary Label */
+  --text-tertiary: #3C3C4399; /* iOS Tertiary Label - 60% opacity */
+  --text-light: #8E8E93; /* iOS Quaternary Label */
+  --border: #C6C6C8; /* iOS Separator */
+  --border-opaque: #3C3C4329; /* iOS Opaque Separator */
+
+  /* Sunday League Palette */
+  --lime: #aef35f;
+  --cyan: #3ce1f7;
+  --coral: #ff5f57;
+  --navy: #0d1321;
+  --forest: #0b3d2e;
+  --charcoal: #1a1a1a;
+
+  /* Safe area insets for mobile devices with notches */
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
 }
 
 * {
@@ -20,29 +103,221 @@
   margin: 0;
 }
 
-html,
+html {
+  max-width: 100vw;
+  overflow-x: hidden;
+  height: 100%;
+  /* Prevent overscroll/bounce effect on iOS */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  /* Fix iOS address bar issues */
+  position: fixed;
+  width: 100%;
+}
+
 body {
   max-width: 100vw;
   overflow-x: hidden;
-}
-
-body {
+  overflow-y: auto;
+  height: 100%;
+  min-height: 100vh;
+  /* Prevent pull-to-refresh and overscroll on iOS */
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  /* Improve tap responsiveness on iOS */
+  -webkit-tap-highlight-color: rgba(0, 122, 255, 0.1);
+  /* Prevent text selection on long press */
+  -webkit-touch-callout: none;
+  /* Smooth scrolling for mobile */
+  -webkit-overflow-scrolling: touch;
+  /* iOS specific fixes */
+  position: relative;
+  /* Styling */
   color: var(--text);
   background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 17px; /* iOS default body text size */
+  line-height: 1.47; /* iOS line height ratio */
+  letter-spacing: -0.408px; /* iOS tracking */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Support for safe areas on iOS devices */
+  padding-top: var(--safe-area-inset-top);
+  padding-right: var(--safe-area-inset-right);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+}
+
+/* iOS Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.408px;
+}
+
+h1 {
+  font-size: 34px; /* iOS Large Title */
+  font-weight: 700;
+  letter-spacing: 0.374px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 28px; /* iOS Title 1 */
+  font-weight: 700;
+  letter-spacing: 0.364px;
+}
+
+h3 {
+  font-size: 22px; /* iOS Title 2 */
+  font-weight: 700;
+  letter-spacing: 0.352px;
+}
+
+h4 {
+  font-size: 20px; /* iOS Title 3 */
+  font-weight: 600;
+  letter-spacing: 0.38px;
+}
+
+/* Stats and data display */
+.stats,
+.score,
+.data-display,
+.monospace {
+  font-family: var(--font-secondary);
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+/* Button typography */
+button,
+.btn {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 a {
-  color: inherit;
+  color: var(--accent);
   text-decoration: none;
+  /* iOS tap highlight */
+  -webkit-tap-highlight-color: rgba(0, 122, 255, 0.15);
+}
+
+/* Improve touch target sizes for mobile */
+button,
+a.btn,
+.btn,
+input[type="button"],
+input[type="submit"] {
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(233, 0, 82, 0.1);
+}
+
+/* Prevent zoom on input focus in iOS */
+input,
+textarea,
+select {
+  font-size: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .safe-top {
+    padding-top: max(1rem, var(--safe-area-inset-top));
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, var(--safe-area-inset-bottom));
+  }
+
+  .safe-left {
+    padding-left: max(1rem, var(--safe-area-inset-left));
+  }
+
+  .safe-right {
+    padding-right: max(1rem, var(--safe-area-inset-right));
+  }
+
+  /* Font utilities */
+  .font-primary {
+    font-family: var(--font-primary);
+  }
+
+  .font-secondary {
+    font-family: var(--font-secondary);
+  }
+
+  .font-mono {
+    font-family: var(--font-secondary);
+  }
+}
+
+/* Apply monospace font to all score-related elements */
+[class*="score-"],
+[class*="-score"],
+.score-value,
+.score-container,
+.score-display,
+.team-points,
+.stat-value,
+.stat-number,
+table td:has(.score),
+.match-score,
+.league-points,
+.goals-for,
+.goals-against,
+.goal-difference,
+.col-stat,
+.col-points,
+.col-goals,
+.col-gf,
+.col-ga,
+.col-gd,
+.table-stat,
+td[class*="stat"],
+td[class*="points"],
+td[class*="goals"] {
+  font-family: var(--font-secondary) !important;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Minute markers in match events */
+.event-minute,
+.minute-display,
+[class*="minute"] {
+  font-family: var(--font-secondary) !important;
+  font-weight: 600;
 }

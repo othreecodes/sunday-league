@@ -8,16 +8,16 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        nickname: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.nickname || !credentials?.password) {
           throw new Error("Missing credentials")
         }
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+          where: { nickname: credentials.nickname }
         })
 
         if (!user) {
@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
+          phoneNumber: user.phoneNumber,
           role: user.role
         }
       }

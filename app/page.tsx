@@ -2,154 +2,147 @@
 
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { Trophy, Target, Users, Calendar, TrendingUp, Shield, User, LogOut, Settings } from 'lucide-react'
+import { Trophy, Target, User, LogOut, Settings, ChevronRight, ClipboardCheck } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
+import { useSettings } from '@/hooks/useSettings'
 import './page.css'
 
 export default function Home() {
   const { data: session, status } = useSession()
+  const { leagueName } = useSettings()
 
   return (
-    <div className="home-container">
-      <header className="home-header">
-        <div className="header-content">
-          <div className="logo">
-            <Trophy size={40} strokeWidth={2} />
-            <div className="logo-text">
-              <h1>Cowrywise FC</h1>
-              <p>Sunday League Manager</p>
+    <div className="home-mobile-container">
+      <MobileHeader
+        title={leagueName}
+        subtitle="Sunday League Manager"
+        showBackButton={false}
+      />
+
+      <MobileContainer>
+        {/* Welcome Hero Section */}
+        <MobileCard padding="large" className="welcome-card">
+          <div className="welcome-content">
+            <div className="welcome-icon">
+              <Trophy size={48} />
             </div>
+            <h2 className="welcome-title">
+              {session ? `Welcome back, ${session.user.name}!` : 'Welcome'}
+            </h2>
+            <p className="welcome-description">
+              Your complete Sunday league football management system
+            </p>
           </div>
-          <div className="header-actions">
-            <Link href="/league" className="header-link">
-              League
-            </Link>
-            {status === 'loading' ? (
-              <div className="header-loading">Loading...</div>
-            ) : session ? (
+        </MobileCard>
+
+        {/* Quick Actions */}
+        <div className="section-header">
+          <h3>Quick Actions</h3>
+        </div>
+
+        <div className="quick-actions">
+          <Link href="/league" className="action-card">
+            <div className="action-icon primary">
+              <Trophy size={28} />
+            </div>
+            <div className="action-content">
+              <h4>League Table</h4>
+              <p>View current standings</p>
+            </div>
+            <ChevronRight size={20} className="action-arrow" />
+          </Link>
+
+          <Link href="/matches" className="action-card">
+            <div className="action-icon secondary">
+              <Target size={28} />
+            </div>
+            <div className="action-content">
+              <h4>Matches</h4>
+              <p>View fixtures & results</p>
+            </div>
+            <ChevronRight size={20} className="action-arrow" />
+          </Link>
+
+          {session ? (
+            session.user.role === 'ADMIN' ? (
               <>
-                {session.user.role === 'ADMIN' && (
-                  <Link href="/admin" className="header-link">
-                    <Settings size={18} />
-                    Admin
-                  </Link>
-                )}
-                <Link href="/profile" className="header-link">
-                  Profile
+                <Link href="/admin/matches" className="action-card">
+                  <div className="action-icon record">
+                    <ClipboardCheck size={28} />
+                  </div>
+                  <div className="action-content">
+                    <h4>Record Match Result</h4>
+                    <p>Update match scores</p>
+                  </div>
+                  <ChevronRight size={20} className="action-arrow" />
                 </Link>
-                <div className="user-info">
-                  <User size={18} />
-                  <span>{session.user.name}</span>
+
+                <Link href="/admin" className="action-card">
+                  <div className="action-icon admin">
+                    <Settings size={28} />
+                  </div>
+                  <div className="action-content">
+                    <h4>Admin Dashboard</h4>
+                    <p>Manage your league</p>
+                  </div>
+                  <ChevronRight size={20} className="action-arrow" />
+                </Link>
+              </>
+            ) : (
+              <Link href="/profile" className="action-card">
+                <div className="action-icon profile">
+                  <User size={28} />
                 </div>
-                <button onClick={() => signOut()} className="btn-signout">
+                <div className="action-content">
+                  <h4>My Profile</h4>
+                  <p>View your stats</p>
+                </div>
+                <ChevronRight size={20} className="action-arrow" />
+              </Link>
+            )
+          ) : (
+            <Link href="/auth/signin" className="action-card">
+              <div className="action-icon profile">
+                <User size={28} />
+              </div>
+              <div className="action-content">
+                <h4>Sign In</h4>
+                <p>Access your account</p>
+              </div>
+              <ChevronRight size={20} className="action-arrow" />
+            </Link>
+          )}
+        </div>
+
+        {/* Account Section */}
+        {session && (
+          <div className="account-section">
+            <div className="section-header">
+              <h3>Account</h3>
+            </div>
+
+            <MobileCard padding="none">
+              <div className="account-card">
+                <div className="account-info">
+                  <div className="account-avatar">
+                    <User size={24} />
+                  </div>
+                  <div className="account-details">
+                    <span className="account-name">{session.user.name}</span>
+                    <span className="account-email">{session.user.email}</span>
+                  </div>
+                </div>
+                <button onClick={() => signOut()} className="btn-signout-mobile">
                   <LogOut size={18} />
                   Sign Out
                 </button>
-              </>
-            ) : (
-              <Link href="/auth/signin" className="btn-signin">
-                Sign In
-              </Link>
-            )}
+              </div>
+            </MobileCard>
           </div>
-        </div>
-      </header>
-
-      <main className="home-main">
-        <section className="hero">
-          <h2>
-            {session ? `Welcome back, ${session.user.name}!` : 'Welcome to Cowrywise FC'}
-          </h2>
-          <p className="hero-description">
-            {session
-              ? 'Your complete Sunday league football management system. Track matches, record results, and view live standings.'
-              : 'Your complete Sunday league football management system. Track matches, record results, and view live standings.'}
-          </p>
-
-          <div className="cta-buttons">
-            <Link href="/league" className="btn btn-primary">
-              <Trophy size={20} />
-              View League Table
-            </Link>
-            {session ? (
-              session.user.role === 'ADMIN' ? (
-                <Link href="/admin" className="btn btn-secondary">
-                  <Settings size={20} />
-                  Admin Dashboard
-                </Link>
-              ) : (
-                <Link href="/profile" className="btn btn-secondary">
-                  <User size={20} />
-                  My Profile
-                </Link>
-              )
-            ) : (
-              <Link href="/auth/register" className="btn btn-secondary">
-                Get Started
-              </Link>
-            )}
-          </div>
-        </section>
-
-        <section className="features">
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Trophy size={32} />
-            </div>
-            <h3>League Table</h3>
-            <p>Track team standings with automatic point calculations and live updates</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Target size={32} />
-            </div>
-            <h3>Match Management</h3>
-            <p>Schedule matches and record goals, assists, and cards in real-time</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <TrendingUp size={32} />
-            </div>
-            <h3>Player Stats</h3>
-            <p>View top scorers, assists, and comprehensive player statistics</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Users size={32} />
-            </div>
-            <h3>Team Management</h3>
-            <p>Organize teams and manage group memberships with ease</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Calendar size={32} />
-            </div>
-            <h3>Season Tracking</h3>
-            <p>Manage multiple seasons and track historical performance</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">
-              <Shield size={32} />
-            </div>
-            <h3>Admin Controls</h3>
-            <p>Powerful admin dashboard for complete league management</p>
-          </div>
-        </section>
-      </main>
-
-      <footer className="home-footer">
-        <div className="footer-content">
-          <div className="footer-brand">
-            <Trophy size={24} />
-            <span>Cowrywise FC</span>
-          </div>
-          <p>&copy; 2025 Cowrywise FC Sunday League Manager. All rights reserved.</p>
-        </div>
-      </footer>
+        )}
+      </MobileContainer>
     </div>
   )
 }
