@@ -19,6 +19,7 @@ interface Season {
 interface Group {
   id: string
   name: string
+  seasonId: string
 }
 
 interface Match {
@@ -61,32 +62,29 @@ export default function MatchesPage() {
 
     if (!session) {
       router.push('/auth/signin')
-    } else if (session.user.role !== 'ADMIN') {
+    } else if (session.user.role !== 'ADMIN' && session.user.role !== 'REFEREE') {
       router.push('/league')
     } else {
       fetchData()
     }
   }, [session, status, router])
 
+  // Reset team filter when season filter changes
+  useEffect(() => {
+    setFilterTeamId('all')
+  }, [filterSeasonId])
+
   const fetchData = async () => {
     try {
-      const [seasonsRes, matchesRes] = await Promise.all([
+      const [seasonsRes, matchesRes, groupsRes] = await Promise.all([
         fetch('/api/seasons'),
-        fetch('/api/matches')
+        fetch('/api/matches'),
+        fetch('/api/groups')
       ])
 
       if (seasonsRes.ok) {
         const seasonsData = await seasonsRes.json()
         setSeasons(seasonsData)
-
-        // Collect all groups from all seasons
-        const allGroupsData: Group[] = []
-        seasonsData.forEach((season: any) => {
-          if (season.groups) {
-            allGroupsData.push(...season.groups)
-          }
-        })
-        setAllGroups(allGroupsData)
 
         // Set default season to active one
         const activeSeason = seasonsData.find((s: Season) => s.isActive)
@@ -102,6 +100,11 @@ export default function MatchesPage() {
             setFilterSeasonId(activeSeason.id)
           }
         }
+      }
+
+      if (groupsRes.ok) {
+        const groupsData = await groupsRes.json()
+        setAllGroups(groupsData)
       }
 
       if (matchesRes.ok) {
@@ -206,6 +209,11 @@ export default function MatchesPage() {
     )
   }
 
+  // Filter groups by selected season
+  const availableGroups = filterSeasonId === 'all'
+    ? allGroups
+    : allGroups.filter(group => group.seasonId === filterSeasonId)
+
   let filteredMatches = matches
 
   // Filter by season
@@ -221,7 +229,7 @@ export default function MatchesPage() {
     )
   }
 
-  if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
+  if (status === 'loading' || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'REFEREE')) {
     return (
       <div className="mobile-loading">
         <div className="spinner" />
@@ -287,7 +295,7 @@ export default function MatchesPage() {
                   className="team-filter-select"
                 >
                   <option value="all">All Teams</option>
-                  {allGroups.map((group) => (
+                  {availableGroups.map((group) => (
                     <option key={group.id} value={group.id}>
                       {group.name}
                     </option>

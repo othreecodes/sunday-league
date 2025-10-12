@@ -13,6 +13,7 @@ interface Member {
   id: string
   name: string
   email: string
+  nickname: string | null
   role: string
   createdAt: string
   _count: {
@@ -29,7 +30,7 @@ export default function MembersPage() {
   const router = useRouter()
   const [members, setMembers] = useState<Member[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<'all' | 'admin' | 'member'>('all')
+  const [filter, setFilter] = useState<'all' | 'admin' | 'referee' | 'member'>('all')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
 
   useEffect(() => {
@@ -120,6 +121,12 @@ export default function MembersPage() {
               Admins ({members.filter(m => m.role === 'ADMIN').length})
             </button>
             <button
+              className={`filter-tab ${filter === 'referee' ? 'active' : ''}`}
+              onClick={() => setFilter('referee')}
+            >
+              Referees ({members.filter(m => m.role === 'REFEREE').length})
+            </button>
+            <button
               className={`filter-tab ${filter === 'member' ? 'active' : ''}`}
               onClick={() => setFilter('member')}
             >
@@ -132,7 +139,7 @@ export default function MembersPage() {
         <div className="mobile-section">
           <div className="mobile-section-header">
             <h2 className="mobile-section-title">
-              {filter === 'all' ? 'All Members' : filter === 'admin' ? 'Admins' : 'Members'}
+              {filter === 'all' ? 'All Members' : filter === 'admin' ? 'Admins' : filter === 'referee' ? 'Referees' : 'Members'}
             </h2>
             <div className="view-toggle">
               <button
@@ -188,7 +195,9 @@ export default function MembersPage() {
                             </div>
                             <div className="member-cell-info">
                               <span className="member-name-table">{member.name}</span>
-                              <span className="member-email-table">{member.email}</span>
+                              {member.nickname && (
+                                <span className="member-email-table">@{member.nickname}</span>
+                              )}
                             </div>
                           </div>
                         </td>
@@ -200,6 +209,7 @@ export default function MembersPage() {
                               className={`role-badge-select ${member.role.toLowerCase()}`}
                             >
                               <option value="MEMBER">Member</option>
+                              <option value="REFEREE">Referee</option>
                               <option value="ADMIN">Admin</option>
                             </select>
                           ) : (
@@ -229,10 +239,12 @@ export default function MembersPage() {
                       </div>
                       <div className="member-info">
                         <h3>{member.name}</h3>
-                        <div className="member-email">
-                          <Mail size={14} />
-                          {member.email}
-                        </div>
+                        {member.nickname && (
+                          <div className="member-email">
+                            <User size={14} />
+                            @{member.nickname}
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -274,6 +286,7 @@ export default function MembersPage() {
                           className="role-select"
                         >
                           <option value="MEMBER">Member</option>
+                          <option value="REFEREE">Referee</option>
                           <option value="ADMIN">Admin</option>
                         </select>
                       </div>

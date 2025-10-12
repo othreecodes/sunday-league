@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Users, Trash2, Edit2, Grid3x3, List } from 'lucide-react'
+import { ChevronLeft, Plus, Users, Trash2, Edit2, Grid3x3, List } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './groups.css'
 
 interface Season {
@@ -143,34 +146,40 @@ export default function GroupsPage() {
 
   if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="groups-container">
-      <header className="groups-header">
-        <Link href="/admin" className="back-link">
-          <ArrowLeft size={20} /> Back to Admin
-        </Link>
-        <h1><Users size={28} className="inline-icon" /> Groups Management</h1>
-      </header>
-
-      <main className="groups-main">
-        <div className="groups-actions">
+    <>
+      <MobileHeader
+        title="Groups"
+        subtitle="Manage teams"
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+        rightAction={
           <button
-            className="btn-primary"
+            className="add-btn"
             onClick={() => setShowForm(!showForm)}
             disabled={seasons.length === 0}
           >
-            <Plus size={20} /> {showForm ? 'Cancel' : 'Create New Group'}
+            <Plus size={20} />
           </button>
-          {seasons.length === 0 && (
-            <p className="warning-text">Please create a season first</p>
-          )}
-        </div>
+        }
+      />
+
+      <MobileContainer>
+        {seasons.length === 0 && (
+          <div className="mobile-warning">
+            <p>Please create a season first</p>
+          </div>
+        )}
 
         <div className="filter-controls">
           <div className="filter-group">
@@ -209,7 +218,7 @@ export default function GroupsPage() {
         </div>
 
         {showForm && (
-          <div className="group-form-card">
+          <MobileCard padding="large" className="group-form-card">
             <h2>Create New Group</h2>
             <form onSubmit={handleSubmit} className="group-form">
               <div className="form-group">
@@ -245,7 +254,7 @@ export default function GroupsPage() {
                 {submitting ? 'Creating...' : 'Create Group'}
               </button>
             </form>
-          </div>
+          </MobileCard>
         )}
 
         <div className="groups-list">
@@ -333,7 +342,7 @@ export default function GroupsPage() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

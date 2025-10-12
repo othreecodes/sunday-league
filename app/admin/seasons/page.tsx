@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowLeft, Plus, Calendar, Trash2, CheckCircle, XCircle, Shuffle } from 'lucide-react'
+import { ChevronLeft, Plus, Calendar, Trash2, CheckCircle, XCircle, Shuffle } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './seasons.css'
 
 interface Season {
@@ -156,33 +158,36 @@ export default function SeasonsPage() {
 
   if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="seasons-container">
-      <header className="seasons-header">
-        <Link href="/admin" className="back-link">
-          <ArrowLeft size={20} /> Back to Admin
-        </Link>
-        <h1><Calendar size={28} className="inline-icon" /> Seasons Management</h1>
-      </header>
-
-      <main className="seasons-main">
-        <div className="seasons-actions">
+    <>
+      <MobileHeader
+        title="Seasons"
+        subtitle="Manage league seasons"
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+        rightAction={
           <button
-            className="btn-primary"
+            className="add-btn"
             onClick={() => setShowForm(!showForm)}
           >
-            <Plus size={20} /> {showForm ? 'Cancel' : 'Create New Season'}
+            <Plus size={20} />
           </button>
-        </div>
+        }
+      />
 
+      <MobileContainer>
         {showForm && (
-          <div className="season-form-card">
+          <MobileCard padding="large" className="season-form-card">
             <h2>Create New Season</h2>
             <form onSubmit={handleSubmit} className="season-form">
               <div className="form-group">
@@ -224,7 +229,7 @@ export default function SeasonsPage() {
                 {submitting ? 'Creating...' : 'Create Season'}
               </button>
             </form>
-          </div>
+          </MobileCard>
         )}
 
         <div className="seasons-list">
@@ -300,7 +305,7 @@ export default function SeasonsPage() {
             </div>
           )}
         </div>
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

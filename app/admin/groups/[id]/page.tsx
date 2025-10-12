@@ -13,6 +13,7 @@ interface GroupMember {
     id: string
     name: string
     email: string
+    nickname: string | null
   }
 }
 
@@ -35,6 +36,7 @@ interface AvailableUser {
   id: string
   name: string
   email: string
+  nickname: string | null
 }
 
 export default function GroupDetailPage() {
@@ -221,7 +223,7 @@ export default function GroupDetailPage() {
                     <option value="">Choose a member...</option>
                     {getNonMembers().map((user) => (
                       <option key={user.id} value={user.id}>
-                        {user.name} ({user.email})
+                        {user.name}{user.nickname ? ` (@${user.nickname})` : ''}
                       </option>
                     ))}
                   </select>
@@ -248,10 +250,12 @@ export default function GroupDetailPage() {
                   </div>
                   <div className="member-info">
                     <h3>{member.user.name}</h3>
-                    <div className="member-email">
-                      <Mail size={14} />
-                      {member.user.email}
-                    </div>
+                    {member.user.nickname && (
+                      <div className="member-email">
+                        <User size={14} />
+                        @{member.user.nickname}
+                      </div>
+                    )}
                   </div>
                   <button
                     className="btn-remove"

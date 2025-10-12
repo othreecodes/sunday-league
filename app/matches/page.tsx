@@ -18,6 +18,7 @@ interface Season {
 interface Group {
   id: string
   name: string
+  seasonId: string
 }
 
 interface Match {
@@ -50,10 +51,10 @@ function MatchesContent() {
   const [allGroups, setAllGroups] = useState<Group[]>([])
   const [teamName, setTeamName] = useState<string>('')
 
-  // Redirect admin users to admin matches view
+  // Redirect admin and referee users to admin matches view
   useEffect(() => {
     if (status === 'loading') return
-    if (session?.user.role === 'ADMIN') {
+    if (session?.user.role === 'ADMIN' || session?.user.role === 'REFEREE') {
       router.replace('/admin/matches')
     }
   }, [session, status, router])
@@ -65,6 +66,8 @@ function MatchesContent() {
   useEffect(() => {
     if (selectedSeason) {
       fetchMatches()
+      // Reset team filter when season changes
+      setTeamFilter('all')
     }
   }, [selectedSeason])
 
@@ -72,20 +75,21 @@ function MatchesContent() {
     filterMatches()
   }, [matches, statusFilter, teamFilter, selectedSeason])
 
+  // Filter groups by selected season
+  const availableGroups = allGroups.filter(group => group.seasonId === selectedSeason)
+
   const fetchSeasons = async () => {
     try {
-      const response = await fetch('/api/seasons')
-      const data = await response.json()
-      setSeasons(data)
+      const [seasonsRes, groupsRes] = await Promise.all([
+        fetch('/api/seasons'),
+        fetch('/api/groups')
+      ])
 
-      // Collect all groups from all seasons
-      const allGroupsData: Group[] = []
-      data.forEach((season: any) => {
-        if (season.groups) {
-          allGroupsData.push(...season.groups)
-        }
-      })
-      setAllGroups(allGroupsData)
+      const data = await seasonsRes.json()
+      const groupsData = await groupsRes.json()
+
+      setSeasons(data)
+      setAllGroups(groupsData)
 
       // Select active season or first season by default
       const activeSeason = data.find((s: Season) => s.isActive)
@@ -242,7 +246,7 @@ function MatchesContent() {
         </MobileCard>
 
         {/* Team Filter */}
-        {allGroups.length > 0 && (
+        {availableGroups.length > 0 && (
           <MobileCard padding="medium" className="status-filter-card">
             <div className="status-filter-content">
               <Filter size={20} />
@@ -252,7 +256,7 @@ function MatchesContent() {
                 className="status-filter-select"
               >
                 <option value="all">All Teams</option>
-                {allGroups.map((group) => (
+                {availableGroups.map((group) => (
                   <option key={group.id} value={group.id}>
                     {group.name}
                   </option>

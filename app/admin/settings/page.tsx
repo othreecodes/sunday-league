@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowLeft, Settings as SettingsIcon, Save } from 'lucide-react'
+import { ChevronLeft, Save } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './settings.css'
 
 interface Settings {
@@ -86,26 +88,33 @@ export default function SettingsPage() {
 
   if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="settings-container">
-      <header className="settings-header">
-        <Link href="/admin" className="back-link">
-          <ArrowLeft size={20} /> Back to Admin
-        </Link>
-        <h1><SettingsIcon size={28} className="inline-icon" /> Admin Settings</h1>
-      </header>
+    <>
+      <MobileHeader
+        title="Settings"
+        subtitle="League configuration"
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+      />
 
-      <main className="settings-main">
+      <MobileContainer>
         {loading ? (
-          <div className="loading">Loading settings...</div>
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading settings...</p>
+          </div>
         ) : (
-          <div className="settings-card">
+          <MobileCard padding="large" className="settings-card">
             <h2>League Configuration</h2>
             <p className="settings-description">
               Configure how the league operates and generates fixtures.
@@ -165,9 +174,9 @@ export default function SettingsPage() {
                 </button>
               </div>
             </form>
-          </div>
+          </MobileCard>
         )}
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

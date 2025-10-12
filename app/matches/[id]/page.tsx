@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { Calendar, MapPin, Clock, ChevronLeft, AlertCircle, Target } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
@@ -59,10 +60,19 @@ export default function MatchDetail() {
   const router = useRouter()
   const params = useParams()
   const matchId = params.id as string
+  const { data: session, status } = useSession()
 
   const [match, setMatch] = useState<Match | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+
+  // Redirect admin and referee users to admin match details view
+  useEffect(() => {
+    if (status === 'loading') return
+    if (session?.user.role === 'ADMIN' || session?.user.role === 'REFEREE') {
+      router.replace(`/admin/matches/${matchId}`)
+    }
+  }, [session, status, router, matchId])
 
   useEffect(() => {
     if (matchId) {
