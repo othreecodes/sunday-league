@@ -22,21 +22,6 @@ export default function Home() {
       />
 
       <MobileContainer>
-        {/* Welcome Hero Section */}
-        <MobileCard padding="large" className="welcome-card">
-          <div className="welcome-content">
-            <div className="welcome-icon">
-              <Trophy size={48} />
-            </div>
-            <h2 className="welcome-title">
-              {session ? `Welcome back, ${session.user.name}!` : 'Welcome'}
-            </h2>
-            <p className="welcome-description">
-              Your complete Sunday league football management system
-            </p>
-          </div>
-        </MobileCard>
-
         {/* Quick Actions */}
         <div className="section-header">
           <h3>Quick Actions</h3>
@@ -131,7 +116,9 @@ export default function Home() {
                   </div>
                   <div className="account-details">
                     <span className="account-name">{session.user.name}</span>
-                    <span className="account-email">{session.user.email}</span>
+                    {session.user.nickname && (
+                      <span className="account-email">@{session.user.nickname}</span>
+                    )}
                   </div>
                 </div>
                 <button onClick={() => signOut()} className="btn-signout-mobile">
