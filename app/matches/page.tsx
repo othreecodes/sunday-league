@@ -1,12 +1,14 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
+import { useEffect, useState, Suspense, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Calendar, MapPin, Clock, Trophy, RefreshCw, Filter } from 'lucide-react'
+import { Calendar, MapPin, Clock, Trophy, Filter } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
+import RefreshIndicator from '@/components/RefreshIndicator'
+import { useCachedData } from '@/hooks/useCachedData'
 import './matches.css'
 
 interface Season {
@@ -42,14 +44,29 @@ function MatchesContent() {
 
   const [seasons, setSeasons] = useState<Season[]>([])
   const [selectedSeason, setSelectedSeason] = useState<string>('')
-  const [matches, setMatches] = useState<Match[]>([])
   const [filteredMatches, setFilteredMatches] = useState<Match[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [teamFilter, setTeamFilter] = useState<string>('all')
   const [allGroups, setAllGroups] = useState<Group[]>([])
   const [teamName, setTeamName] = useState<string>('')
+
+  // Fetch function for matches
+  const fetchMatchesData = useCallback(async (): Promise<Match[]> => {
+    const response = await fetch('/api/matches')
+    if (!response.ok) {
+      throw new Error('Failed to load matches')
+    }
+    return response.json()
+  }, [])
+
+  // Use cached data hook
+  const { data: matches, loading, refreshing } = useCachedData<Match[]>(
+    fetchMatchesData,
+    {
+      cacheKey: 'matches',
+      cacheDuration: 3 * 60 * 1000 // 3 minutes
+    }
+  )
 
   // Redirect admin and referee users to admin matches view
   useEffect(() => {
@@ -65,7 +82,6 @@ function MatchesContent() {
 
   useEffect(() => {
     if (selectedSeason) {
-      fetchMatches()
       // Reset team filter when season changes
       setTeamFilter('all')
     }
@@ -99,26 +115,16 @@ function MatchesContent() {
         setSelectedSeason(data[0].id)
       }
     } catch (err) {
-      setError('Failed to load seasons')
-    }
-  }
-
-  const fetchMatches = async () => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const response = await fetch('/api/matches')
-      const data = await response.json()
-      setMatches(data)
-    } catch (err) {
-      setError('Failed to load matches')
-    } finally {
-      setLoading(false)
+      console.error('Failed to load seasons:', err)
     }
   }
 
   const filterMatches = () => {
+    if (!matches) {
+      setFilteredMatches([])
+      return
+    }
+
     let filtered = matches
 
     // Filter by season
@@ -152,12 +158,6 @@ function MatchesContent() {
     filtered.sort((a, b) => new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime())
 
     setFilteredMatches(filtered)
-  }
-
-  const handleRefresh = () => {
-    if (selectedSeason) {
-      fetchMatches()
-    }
   }
 
   const getStatusBadge = (status: string) => {
@@ -200,11 +200,7 @@ function MatchesContent() {
       <MobileHeader
         title="Matches"
         subtitle={selectedSeasonData?.name}
-        rightAction={
-          <button onClick={handleRefresh} className="refresh-btn" disabled={loading}>
-            <RefreshCw size={20} className={loading ? 'spinning' : ''} />
-          </button>
-        }
+        rightAction={<RefreshIndicator isRefreshing={refreshing} />}
       />
 
       <MobileContainer>
@@ -266,11 +262,7 @@ function MatchesContent() {
           </MobileCard>
         )}
 
-        {error && (
-          <div className="mobile-error-message">{error}</div>
-        )}
-
-        {loading ? (
+        {loading && !matches ? (
           <div className="mobile-loading">
             <div className="spinner" />
             <p>Loading matches...</p>

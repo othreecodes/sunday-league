@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { Trophy, Target, Award, Calendar, RefreshCw, LayoutGrid, List } from 'lucide-react'
+import { Trophy, Target, Award, Calendar, LayoutGrid, List } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
+import RefreshIndicator from '@/components/RefreshIndicator'
+import { useCachedData } from '@/hooks/useCachedData'
 import './league.css'
 
 interface LeagueTableEntry {
@@ -37,27 +39,40 @@ interface Season {
   isActive: boolean
 }
 
+interface LeagueData {
+  table: LeagueTableEntry[]
+  topScorers: PlayerStats[]
+}
+
 type ViewMode = 'list' | 'grid'
 
 export default function League() {
   const router = useRouter()
   const [seasons, setSeasons] = useState<Season[]>([])
   const [selectedSeason, setSelectedSeason] = useState<string>('')
-  const [table, setTable] = useState<LeagueTableEntry[]>([])
-  const [topScorers, setTopScorers] = useState<PlayerStats[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('list')
+
+  // Fetch function for league data
+  const fetchLeagueData = useCallback(async (): Promise<LeagueData> => {
+    const response = await fetch(`/api/league/${selectedSeason}`)
+    if (!response.ok) {
+      throw new Error('Failed to load league data')
+    }
+    return response.json()
+  }, [selectedSeason])
+
+  // Use cached data hook
+  const { data: leagueData, loading, refreshing, refetch } = useCachedData<LeagueData>(
+    fetchLeagueData,
+    {
+      cacheKey: `league-${selectedSeason}`,
+      cacheDuration: 5 * 60 * 1000 // 5 minutes
+    }
+  )
 
   useEffect(() => {
     fetchSeasons()
   }, [])
-
-  useEffect(() => {
-    if (selectedSeason) {
-      fetchLeagueData()
-    }
-  }, [selectedSeason])
 
   const fetchSeasons = async () => {
     try {
@@ -73,32 +88,12 @@ export default function League() {
         setSelectedSeason(data[0].id)
       }
     } catch (err) {
-      setError('Failed to load seasons')
+      console.error('Failed to load seasons:', err)
     }
   }
 
-  const fetchLeagueData = async () => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const response = await fetch(`/api/league/${selectedSeason}`)
-      const data = await response.json()
-
-      setTable(data.table)
-      setTopScorers(data.topScorers)
-    } catch (err) {
-      setError('Failed to load league data')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleRefresh = () => {
-    if (selectedSeason) {
-      fetchLeagueData()
-    }
-  }
+  const table = leagueData?.table || []
+  const topScorers = leagueData?.topScorers || []
 
   const selectedSeasonData = seasons.find(s => s.id === selectedSeason)
 
@@ -107,11 +102,7 @@ export default function League() {
       <MobileHeader
         title="League"
         subtitle={selectedSeasonData?.name}
-        rightAction={
-          <button onClick={handleRefresh} className="refresh-btn" disabled={loading}>
-            <RefreshCw size={20} className={loading ? 'spinning' : ''} />
-          </button>
-        }
+        rightAction={<RefreshIndicator isRefreshing={refreshing} />}
       />
 
       <MobileContainer>
@@ -135,11 +126,7 @@ export default function League() {
           </MobileCard>
         )}
 
-        {error && (
-          <div className="mobile-error-message">{error}</div>
-        )}
-
-        {loading ? (
+        {loading && !leagueData ? (
           <div className="mobile-loading">
             <div className="spinner" />
             <p>Loading league data...</p>
