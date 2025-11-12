@@ -1,6 +1,14 @@
-# ⚽ Cowrywise FC - Sunday League Manager
+# ⚽ Sunday League Manager
 
-A Progressive Web App (PWA) for managing Sunday league football matches, scores, player statistics, and league tables for Cowrywise FC.
+A Progressive Web App (PWA) for managing Sunday league football matches, scores, player statistics, and league tables for Sunday League.
+
+## Screenshots
+
+| | |
+|:------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:|
+| <img src="screens/IMG_2858.PNG" alt="League view" title="League view" width="100%" /> | <img src="screens/IMG_2859.PNG" alt="Match view" title="Match view" width="100%" /> |
+| <img src="screens/IMG_2860.PNG" alt="Profile view" title="Profile view" width="100%" /> | <img src="screens/IMG_2861.PNG" alt="Admin view" title="Admin view" width="100%" /> |
+| <img src="screens/IMG_2862.PNG" alt="Groups view" title="Groups view" width="100%" /> |
 
 ## Features
 
@@ -14,11 +22,16 @@ A Progressive Web App (PWA) for managing Sunday league football matches, scores,
 - 🏆 **Player Statistics** - Top scorers, assists, and disciplinary records
 - 👥 **Group Management** - Create and manage different teams/groups
 - 📅 **Season Management** - Organize matches by seasons
+- 👤 **Temporary Players** - Add and manage temporary players for one-off games
+- 🗓️ **Fixture Generation** - Automatically generate fixtures for a season
+- 🧑‍⚖️ **Referee Role** - Assign referees to matches
+- 🟨 **User Suspension** - Suspend users for a specified period
+- ⚙️ **Customizable Settings** - Change the league name and other settings
 
 ## Tech Stack
 
 - **Frontend**: Next.js 15, React, TypeScript
-- **Styling**: Tailwind CSS (separate CSS files)
+- **Styling**: CSS Modules (separate CSS files)
 - **Backend**: Next.js API Routes
 - **Database**: SQLite with Prisma ORM
 - **Authentication**: NextAuth.js
@@ -27,15 +40,19 @@ A Progressive Web App (PWA) for managing Sunday league football matches, scores,
 
 ## Database Schema
 
-The app uses the following main models:
+The app uses a relational database schema to manage all aspects of the league. The main models are:
 
-- **User** - Player profiles with authentication
-- **Season** - Different playing periods
-- **Group** - Teams/groups within a season
-- **Match** - Individual matches with scores
-- **Goal** - Goals scored with scorer and assist info
-- **Card** - Yellow and red cards
-- **MatchPlayer** - Players who participated in each match
+- **User**: Stores player profiles, roles (Admin, Member, Referee), and authentication details. It also tracks user-specific data like suspensions.
+- **Season**: Represents a playing period (e.g., "2025 Season") and groups together related teams and matches.
+- **Group**: Represents a team within a season.
+- **GroupMember**: A through table linking Users to Groups, representing team rosters.
+- **Match**: Holds details for individual matches, including teams, scores, date, location, and status.
+- **MatchPlayer**: A through table tracking which players participated in a specific match.
+- **Goal**: Records each goal scored in a match, including the scorer and (optionally) the player who assisted.
+- **Card**: Tracks yellow and red cards issued to players during a match.
+- **Settings**: A singleton table for global application settings like the league name.
+
+Relationships are defined to link these models, for example, a `Match` is linked to two `Groups` (home and away), a `Season`, and multiple `Goals` and `Cards`.
 
 ## Getting Started
 
@@ -49,7 +66,7 @@ The app uses the following main models:
 
 1. **Clone and navigate to the project**:
    ```bash
-   cd cowrywise-fc
+   cd sunday-league
    ```
 
 2. **Install dependencies**:
@@ -136,7 +153,7 @@ As per your preference, the project includes Docker configuration:
 ## Project Structure
 
 ```
-cowrywise-fc/
+sunday-league/
 ├── app/
 │   ├── api/              # API routes
 │   ├── auth/             # Auth pages
@@ -222,18 +239,3 @@ The app is installable as a PWA on mobile devices:
 - [ ] Multi-language support
 - [ ] Dark mode
 
-## Contributing
-
-This is a private project for Cowrywise FC. Contact the admin for contribution guidelines.
-
-## License
-
-Private - All rights reserved to Cowrywise FC
-
-## Support
-
-For issues or questions, contact the development team.
-
----
-
-Built with ❤️ for Cowrywise FC Sunday League

@@ -1,6 +1,6 @@
 {
-  "name": "Cowrywise FC - Sunday League Manager",
-  "short_name": "Cowrywise FC",
+  "name": "Sunday League Manager",
+  "short_name": "SundayLeague FC",
   "description": "Manage your Sunday league football matches, scores, and stats",
   "start_url": "/",
   "display": "standalone",

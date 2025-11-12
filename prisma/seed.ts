@@ -9,11 +9,11 @@ async function main() {
   // Create admin user
   const adminPassword = await bcrypt.hash('admin123', 10)
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@cowrywise.com' },
+    where: { email: 'admin@sundayleague.local' },
     update: {},
     create: {
       name: 'Admin User',
-      email: 'admin@cowrywise.com',
+      email: 'admin@sundayleague.local',
       password: adminPassword,
       role: 'ADMIN'
     }
@@ -24,54 +24,54 @@ async function main() {
   const userPassword = await bcrypt.hash('user123', 10)
   const users = await Promise.all([
     prisma.user.upsert({
-      where: { email: 'john@cowrywise.com' },
+      where: { email: 'john@sundayleague.local' },
       update: {},
-      create: { name: 'John Doe', email: 'john@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'John Doe', email: 'john@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'jane@cowrywise.com' },
+      where: { email: 'jane@sundayleague.local' },
       update: {},
-      create: { name: 'Jane Smith', email: 'jane@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Jane Smith', email: 'jane@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'mike@cowrywise.com' },
+      where: { email: 'mike@sundayleague.local' },
       update: {},
-      create: { name: 'Mike Johnson', email: 'mike@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Mike Johnson', email: 'mike@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'sarah@cowrywise.com' },
+      where: { email: 'sarah@sundayleague.local' },
       update: {},
-      create: { name: 'Sarah Williams', email: 'sarah@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Sarah Williams', email: 'sarah@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'david@cowrywise.com' },
+      where: { email: 'david@sundayleague.local' },
       update: {},
-      create: { name: 'David Brown', email: 'david@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'David Brown', email: 'david@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'emma@cowrywise.com' },
+      where: { email: 'emma@sundayleague.local' },
       update: {},
-      create: { name: 'Emma Davis', email: 'emma@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Emma Davis', email: 'emma@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'james@cowrywise.com' },
+      where: { email: 'james@sundayleague.local' },
       update: {},
-      create: { name: 'James Wilson', email: 'james@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'James Wilson', email: 'james@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'lisa@cowrywise.com' },
+      where: { email: 'lisa@sundayleague.local' },
       update: {},
-      create: { name: 'Lisa Moore', email: 'lisa@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Lisa Moore', email: 'lisa@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'tom@cowrywise.com' },
+      where: { email: 'tom@sundayleague.local' },
       update: {},
-      create: { name: 'Tom Taylor', email: 'tom@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Tom Taylor', email: 'tom@sundayleague.local', password: userPassword, role: 'MEMBER' }
     }),
     prisma.user.upsert({
-      where: { email: 'kate@cowrywise.com' },
+      where: { email: 'kate@sundayleague.local' },
       update: {},
-      create: { name: 'Kate Anderson', email: 'kate@cowrywise.com', password: userPassword, role: 'MEMBER' }
+      create: { name: 'Kate Anderson', email: 'kate@sundayleague.local', password: userPassword, role: 'MEMBER' }
     })
   ])
   console.log('Created users:', users.length)

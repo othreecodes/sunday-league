@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     const hashedPassword = await hash(password, 12)
 
     // Generate a unique email from nickname for NextAuth compatibility
-    const generatedEmail = `${nickname}@cowrywisefc.local`
+    const generatedEmail = `${nickname}@sundayleague.local`
 
     // Create user
     const user = await prisma.user.create({

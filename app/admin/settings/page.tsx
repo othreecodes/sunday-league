@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null)
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
-    leagueName: 'Cowrywise FC',
+    leagueName: 'SundayLeague FC',
     matchesPerSeason: 1
   })
   const [submitting, setSubmitting] = useState(false)

@@ -4,13 +4,13 @@ import { Providers } from "./providers";
 import MobileNav from "@/components/MobileNav";
 
 export const metadata: Metadata = {
-  title: "Cowrywise FC - Sunday League Manager",
+  title: "Sunday League Manager",
   description: "Manage your Sunday league football matches, scores, and stats",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Cowrywise FC"
+    title: "SundayLeague FC"
   },
   formatDetection: {
     telephone: false

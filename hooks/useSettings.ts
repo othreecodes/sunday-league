@@ -28,5 +28,5 @@ export function useSettings() {
     fetchSettings()
   }, [])
 
-  return { settings, loading, leagueName: settings?.leagueName || 'Cowrywise FC' }
+  return { settings, loading, leagueName: settings?.leagueName || 'SundayLeague FC' }
 }

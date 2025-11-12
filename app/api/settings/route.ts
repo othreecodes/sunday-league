@@ -13,7 +13,7 @@ export async function GET() {
       settings = await prisma.settings.create({
         data: {
           id: 'default-settings',
-          leagueName: 'Cowrywise FC',
+          leagueName: 'SundayLeague FC',
           matchesPerSeason: 1
         }
       })
@@ -70,7 +70,7 @@ export async function PATCH(req: Request) {
       settings = await prisma.settings.create({
         data: {
           id: 'default-settings',
-          leagueName: data.leagueName || 'Cowrywise FC',
+          leagueName: data.leagueName || 'SundayLeague FC',
           matchesPerSeason: data.matchesPerSeason || 1
         }
       })
