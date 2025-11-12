@@ -1,12 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, User, Users, Shield, Mail, Calendar, Award, LayoutGrid, List } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
+import RefreshIndicator from '@/components/RefreshIndicator'
+import { useCachedData } from '@/hooks/useCachedData'
 import './members.css'
 
 interface Member {
@@ -28,10 +30,26 @@ type ViewMode = 'list' | 'grid'
 export default function MembersPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [members, setMembers] = useState<Member[]>([])
-  const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'admin' | 'referee' | 'member'>('all')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+
+  // Fetch function for members
+  const fetchMembersData = useCallback(async (): Promise<Member[]> => {
+    const res = await fetch('/api/users')
+    if (!res.ok) {
+      throw new Error('Failed to fetch members')
+    }
+    return res.json()
+  }, [])
+
+  // Use cached data hook
+  const { data: members, loading, refreshing, refetch } = useCachedData<Member[]>(
+    fetchMembersData,
+    {
+      cacheKey: 'members',
+      cacheDuration: 5 * 60 * 1000 // 5 minutes
+    }
+  )
 
   useEffect(() => {
     if (status === 'loading') return
@@ -40,24 +58,8 @@ export default function MembersPage() {
       router.push('/auth/signin')
     } else if (session.user.role !== 'ADMIN') {
       router.push('/league')
-    } else {
-      fetchMembers()
     }
   }, [session, status, router])
-
-  const fetchMembers = async () => {
-    try {
-      const res = await fetch('/api/users')
-      if (res.ok) {
-        const data = await res.json()
-        setMembers(data)
-      }
-    } catch (error) {
-      console.error('Error fetching members:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const updateRole = async (userId: string, newRole: string) => {
     try {
@@ -68,7 +70,7 @@ export default function MembersPage() {
       })
 
       if (res.ok) {
-        fetchMembers()
+        refetch()
       } else {
         alert('Failed to update user role')
       }
@@ -87,10 +89,12 @@ export default function MembersPage() {
     )
   }
 
-  const filteredMembers = members.filter(member => {
+  const filteredMembers = (members || []).filter(member => {
     if (filter === 'all') return true
     return member.role === filter.toUpperCase()
   })
+
+  const membersList = members || []
 
   return (
     <>
@@ -102,6 +106,7 @@ export default function MembersPage() {
             <ChevronLeft size={20} />
           </button>
         }
+        rightAction={<RefreshIndicator isRefreshing={refreshing} />}
       />
 
       <MobileContainer>
@@ -112,25 +117,25 @@ export default function MembersPage() {
               className={`filter-tab ${filter === 'all' ? 'active' : ''}`}
               onClick={() => setFilter('all')}
             >
-              All ({members.length})
+              All ({membersList.length})
             </button>
             <button
               className={`filter-tab ${filter === 'admin' ? 'active' : ''}`}
               onClick={() => setFilter('admin')}
             >
-              Admins ({members.filter(m => m.role === 'ADMIN').length})
+              Admins ({membersList.filter(m => m.role === 'ADMIN').length})
             </button>
             <button
               className={`filter-tab ${filter === 'referee' ? 'active' : ''}`}
               onClick={() => setFilter('referee')}
             >
-              Referees ({members.filter(m => m.role === 'REFEREE').length})
+              Referees ({membersList.filter(m => m.role === 'REFEREE').length})
             </button>
             <button
               className={`filter-tab ${filter === 'member' ? 'active' : ''}`}
               onClick={() => setFilter('member')}
             >
-              Members ({members.filter(m => m.role === 'MEMBER').length})
+              Members ({membersList.filter(m => m.role === 'MEMBER').length})
             </button>
           </div>
         </MobileCard>
@@ -159,7 +164,7 @@ export default function MembersPage() {
             </div>
           </div>
 
-          {loading ? (
+          {loading && !members ? (
             <div className="mobile-loading">
               <div className="spinner" />
               <p>Loading members...</p>
