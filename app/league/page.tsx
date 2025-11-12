@@ -54,6 +54,9 @@ export default function League() {
 
   // Fetch function for league data
   const fetchLeagueData = useCallback(async (): Promise<LeagueData> => {
+    if (!selectedSeason) {
+      throw new Error('No season selected')
+    }
     const response = await fetch(`/api/league/${selectedSeason}`)
     if (!response.ok) {
       throw new Error('Failed to load league data')
@@ -61,7 +64,7 @@ export default function League() {
     return response.json()
   }, [selectedSeason])
 
-  // Use cached data hook
+  // Use cached data hook - only when season is selected
   const { data: leagueData, loading, refreshing, refetch } = useCachedData<LeagueData>(
     fetchLeagueData,
     {

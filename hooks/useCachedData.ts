@@ -85,7 +85,7 @@ export function useCachedData<T>(
     }
   }, [fetchFn, setCachedData])
 
-  // Initial load
+  // Initial load and refetch on cacheKey change
   useEffect(() => {
     const cached = getCachedData()
 
@@ -100,7 +100,7 @@ export function useCachedData<T>(
       // No cache, show loading
       fetchData(false)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [cacheKey, getCachedData, fetchData])
 
   // Manual refetch function
   const refetch = useCallback(async () => {
