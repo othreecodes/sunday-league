@@ -8,7 +8,7 @@ A Progressive Web App (PWA) for managing Sunday league football matches, scores,
 |:------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:|
 | <img src="screens/IMG_2858.PNG" alt="League view" title="League view" width="100%" /> | <img src="screens/IMG_2859.PNG" alt="Match view" title="Match view" width="100%" /> |
 | <img src="screens/IMG_2860.PNG" alt="Profile view" title="Profile view" width="100%" /> | <img src="screens/IMG_2861.PNG" alt="Admin view" title="Admin view" width="100%" /> |
-| <img src="screens/IMG_2862.PNG" alt="Groups view" title="Groups view" width="100%" /> |
+| <img src="screens/IMG_2862.PNG" alt="Groups view" title="Groups view" width="100%" /> | <img src="screens/IMG_2863.PNG" alt="Match Detail view" title="Match Detail view" width="100%" /> |
 
 ## Features
 
