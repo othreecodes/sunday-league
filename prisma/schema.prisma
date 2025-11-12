@@ -10,13 +10,14 @@ datasource db {
 model User {
   id             String        @id @default(cuid())
   name           String
-  email          String        @unique
-  password       String
+  email          String?       @unique
+  password       String?
   phoneNumber    String?
   role           Role          @default(MEMBER)
   isActive       Boolean       @default(true)
   isSuspended    Boolean       @default(false)
   suspendedUntil DateTime?
+  isTemporary    Boolean       @default(false)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   nickname       String?       @unique

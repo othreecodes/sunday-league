@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { Calendar, Users, FileText, User, BarChart3, Settings as SettingsIcon } from 'lucide-react'
+import { Calendar, Users, FileText, User, BarChart3, Settings as SettingsIcon, UserPlus } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
@@ -60,6 +60,13 @@ export default function AdminDashboard() {
       icon: User,
       href: '/admin/members',
       color: '#10b981'
+    },
+    {
+      title: 'Temporary Members',
+      description: 'Link temporary accounts to real users',
+      icon: UserPlus,
+      href: '/admin/temporary-members',
+      color: '#f97316'
     },
     {
       title: 'Statistics',

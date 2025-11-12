@@ -14,8 +14,9 @@ interface GroupMember {
   user: {
     id: string
     name: string
-    email: string
+    email: string | null
     nickname: string | null
+    isTemporary: boolean
   }
 }
 
@@ -53,6 +54,9 @@ export default function GroupDetailPage() {
   const [showAddMember, setShowAddMember] = useState(false)
   const [selectedUserId, setSelectedUserId] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [addType, setAddType] = useState<'existing' | 'temporary'>('existing')
+  const [tempUserName, setTempUserName] = useState('')
+  const [tempUserNickname, setTempUserNickname] = useState('')
 
   useEffect(() => {
     if (status === 'loading') return
@@ -91,23 +95,49 @@ export default function GroupDetailPage() {
 
   const addMember = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedUserId) return
+
+    if (addType === 'existing' && !selectedUserId) return
+    if (addType === 'temporary' && !tempUserName.trim()) return
 
     setSubmitting(true)
 
     try {
-      const res = await fetch(`/api/groups/${groupId}/members`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: selectedUserId })
-      })
+      if (addType === 'existing') {
+        // Add existing user to group
+        const res = await fetch(`/api/groups/${groupId}/members`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: selectedUserId })
+        })
 
-      if (res.ok) {
-        setSelectedUserId('')
-        setShowAddMember(false)
-        fetchData()
+        if (res.ok) {
+          setSelectedUserId('')
+          setShowAddMember(false)
+          fetchData()
+        } else {
+          alert('Failed to add member')
+        }
       } else {
-        alert('Failed to add member')
+        // Create temporary user and add to group
+        const res = await fetch('/api/users/temporary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: tempUserName.trim(),
+            nickname: tempUserNickname.trim() || undefined,
+            groupId
+          })
+        })
+
+        if (res.ok) {
+          setTempUserName('')
+          setTempUserNickname('')
+          setShowAddMember(false)
+          fetchData()
+        } else {
+          const error = await res.json()
+          alert(error.error || 'Failed to create temporary member')
+        }
       }
     } catch (error) {
       console.error('Error adding member:', error)
@@ -244,23 +274,73 @@ export default function GroupDetailPage() {
             <MobileCard padding="large" className="add-member-form">
               <form onSubmit={addMember}>
                 <div className="form-group">
-                  <label htmlFor="userId">Select Member</label>
-                  <select
-                    id="userId"
-                    value={selectedUserId}
-                    onChange={(e) => setSelectedUserId(e.target.value)}
-                    required
-                  >
-                    <option value="">Choose a member...</option>
-                    {getNonMembers().map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {user.name}{user.nickname ? ` (@${user.nickname})` : ''}
-                      </option>
-                    ))}
-                  </select>
+                  <label>Member Type</label>
+                  <div className="type-toggle">
+                    <button
+                      type="button"
+                      className={`type-toggle-btn ${addType === 'existing' ? 'active' : ''}`}
+                      onClick={() => setAddType('existing')}
+                    >
+                      Existing Member
+                    </button>
+                    <button
+                      type="button"
+                      className={`type-toggle-btn ${addType === 'temporary' ? 'active' : ''}`}
+                      onClick={() => setAddType('temporary')}
+                    >
+                      Temporary Member
+                    </button>
+                  </div>
                 </div>
+
+                {addType === 'existing' ? (
+                  <div className="form-group">
+                    <label htmlFor="userId">Select Member</label>
+                    <select
+                      id="userId"
+                      value={selectedUserId}
+                      onChange={(e) => setSelectedUserId(e.target.value)}
+                      required
+                    >
+                      <option value="">Choose a member...</option>
+                      {getNonMembers().map((user) => (
+                        <option key={user.id} value={user.id}>
+                          {user.name}{user.nickname ? ` (@${user.nickname})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <>
+                    <div className="form-group">
+                      <label htmlFor="tempName">Name *</label>
+                      <input
+                        type="text"
+                        id="tempName"
+                        value={tempUserName}
+                        onChange={(e) => setTempUserName(e.target.value)}
+                        placeholder="e.g., John Doe"
+                        required
+                      />
+                      <small className="form-hint">
+                        This person hasn't signed up yet
+                      </small>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="tempNickname">Nickname (optional)</label>
+                      <input
+                        type="text"
+                        id="tempNickname"
+                        value={tempUserNickname}
+                        onChange={(e) => setTempUserNickname(e.target.value)}
+                        placeholder="e.g., Johnny"
+                      />
+                    </div>
+                  </>
+                )}
+
                 <button type="submit" className="btn-submit" disabled={submitting}>
-                  {submitting ? 'Adding...' : 'Add to Group'}
+                  {submitting ? 'Adding...' : addType === 'existing' ? 'Add to Group' : 'Create & Add to Group'}
                 </button>
               </form>
             </MobileCard>
@@ -283,7 +363,12 @@ export default function GroupDetailPage() {
                       <User size={32} />
                     </div>
                     <div className="member-info">
-                      <h3>{member.user.name}</h3>
+                      <div className="member-name-row">
+                        <h3>{member.user.name}</h3>
+                        {member.user.isTemporary && (
+                          <span className="temp-badge">Temporary</span>
+                        )}
+                      </div>
                       {member.user.nickname && (
                         <div className="member-email">
                           <User size={14} />

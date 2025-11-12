@@ -16,6 +16,7 @@ interface Member {
   name: string
   email: string
   nickname: string | null
+  isTemporary: boolean
   role: string
   createdAt: string
   _count: {
@@ -199,7 +200,12 @@ export default function MembersPage() {
                               <User size={20} />
                             </div>
                             <div className="member-cell-info">
-                              <span className="member-name-table">{member.name}</span>
+                              <div className="member-name-row">
+                                <span className="member-name-table">{member.name}</span>
+                                {member.isTemporary && (
+                                  <span className="temp-badge-small">TEMP</span>
+                                )}
+                              </div>
                               {member.nickname && (
                                 <span className="member-email-table">@{member.nickname}</span>
                               )}
@@ -243,7 +249,12 @@ export default function MembersPage() {
                         <User size={32} />
                       </div>
                       <div className="member-info">
-                        <h3>{member.name}</h3>
+                        <div className="member-name-row">
+                          <h3>{member.name}</h3>
+                          {member.isTemporary && (
+                            <span className="temp-badge-small">TEMP</span>
+                          )}
+                        </div>
                         {member.nickname && (
                           <div className="member-email">
                             <User size={14} />

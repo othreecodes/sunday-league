@@ -275,12 +275,33 @@
   min-width: 0;
 }
 
+.member-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
 .member-name-table {
   font-weight: 600;
   color: #1e1e1e;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.temp-badge-small {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.375rem;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .member-email-table {
@@ -355,10 +376,16 @@
   font-size: 1rem;
   font-weight: 600;
   color: #1e1e1e;
-  margin: 0 0 0.25rem 0;
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.member-name-row h3 {
+  margin: 0;
+  overflow: visible;
+  white-space: normal;
 }
 
 .member-email {
