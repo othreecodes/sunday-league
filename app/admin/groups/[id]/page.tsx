@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowLeft, Users, Plus, Trash2, User, Mail } from 'lucide-react'
+import { ChevronLeft, Users, Plus, Trash2, User } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './group-detail.css'
 
 interface GroupMember {
@@ -144,39 +146,68 @@ export default function GroupDetailPage() {
 
   if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading group details...</div>
-      </div>
+      <>
+        <MobileHeader
+          title="Group Details"
+          leftAction={
+            <button onClick={() => router.back()} className="back-btn">
+              <ChevronLeft size={20} />
+            </button>
+          }
+        />
+        <MobileContainer>
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading group details...</p>
+          </div>
+        </MobileContainer>
+      </>
     )
   }
 
   if (!group) {
     return (
-      <div className="loading-container">
-        <div className="error-box">Group not found</div>
-      </div>
+      <>
+        <MobileHeader
+          title="Group Details"
+          leftAction={
+            <button onClick={() => router.back()} className="back-btn">
+              <ChevronLeft size={20} />
+            </button>
+          }
+        />
+        <MobileContainer>
+          <div className="mobile-empty-state">
+            <h3 className="mobile-empty-title">Group not found</h3>
+          </div>
+        </MobileContainer>
+      </>
     )
   }
 
   return (
-    <div className="group-detail-container">
-      <header className="group-detail-header">
-        <Link href="/admin/groups" className="back-link">
-          <ArrowLeft size={20} /> Back to Groups
-        </Link>
-        <h1><Users size={28} className="inline-icon" /> {group.name}</h1>
-      </header>
+    <>
+      <MobileHeader
+        title={group.name}
+        subtitle={group.season.name}
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+      />
 
-      <main className="group-detail-main">
-        <div className="group-info-card">
+      <MobileContainer>
+        <MobileCard padding="large" className="group-info-card">
           <h2>Group Information</h2>
           <div className="info-grid">
             <div className="info-item">
@@ -194,11 +225,11 @@ export default function GroupDetailPage() {
               </span>
             </div>
           </div>
-        </div>
+        </MobileCard>
 
-        <div className="members-section">
-          <div className="section-header">
-            <h2>Team Members</h2>
+        <div className="mobile-section">
+          <div className="mobile-section-header">
+            <h2 className="mobile-section-title">Team Members</h2>
             <button
               className="btn-primary"
               onClick={() => setShowAddMember(!showAddMember)}
@@ -210,7 +241,7 @@ export default function GroupDetailPage() {
           </div>
 
           {showAddMember && (
-            <div className="add-member-form">
+            <MobileCard padding="large" className="add-member-form">
               <form onSubmit={addMember}>
                 <div className="form-group">
                   <label htmlFor="userId">Select Member</label>
@@ -232,44 +263,48 @@ export default function GroupDetailPage() {
                   {submitting ? 'Adding...' : 'Add to Group'}
                 </button>
               </form>
-            </div>
+            </MobileCard>
           )}
 
           {group.members.length === 0 ? (
-            <div className="empty-state">
-              <Users size={48} />
-              <h3>No Members Yet</h3>
-              <p>Add members to get started</p>
+            <div className="mobile-empty-state">
+              <div className="mobile-empty-icon">
+                <Users size={64} />
+              </div>
+              <h3 className="mobile-empty-title">No Members Yet</h3>
+              <p className="mobile-empty-description">Add members to get started</p>
             </div>
           ) : (
-            <div className="members-grid">
+            <div className="mobile-card-list">
               {group.members.map((member) => (
-                <div key={member.id} className="member-card">
-                  <div className="member-avatar">
-                    <User size={32} />
+                <MobileCard key={member.id} padding="medium">
+                  <div className="member-card">
+                    <div className="member-avatar">
+                      <User size={32} />
+                    </div>
+                    <div className="member-info">
+                      <h3>{member.user.name}</h3>
+                      {member.user.nickname && (
+                        <div className="member-email">
+                          <User size={14} />
+                          @{member.user.nickname}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className="btn-remove"
+                      onClick={() => removeMember(member.id)}
+                      title="Remove from group"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
-                  <div className="member-info">
-                    <h3>{member.user.name}</h3>
-                    {member.user.nickname && (
-                      <div className="member-email">
-                        <User size={14} />
-                        @{member.user.nickname}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    className="btn-remove"
-                    onClick={() => removeMember(member.id)}
-                    title="Remove from group"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                </MobileCard>
               ))}
             </div>
           )}
         </div>
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

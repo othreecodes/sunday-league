@@ -29,10 +29,18 @@
   background: #f3f4f6;
   border-radius: 0.5rem;
   padding: 0.25rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filter-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .filter-tab {
-  flex: 1;
+  flex: 0 0 auto;
   min-width: fit-content;
   padding: 0.625rem 1rem;
   background: transparent;
@@ -43,6 +51,7 @@
   color: #6b7280;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .filter-tab:active {
