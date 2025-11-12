@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
+import { ChevronLeft, Plus, Trash2, AlertCircle, CheckCircle, Target } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './record.css'
 
 interface User {
@@ -84,7 +87,7 @@ export default function RecordMatchPage() {
 
     if (!session) {
       router.push('/auth/signin')
-    } else if (session.user.role !== 'ADMIN') {
+    } else if (session.user.role !== 'ADMIN' && session.user.role !== 'REFEREE') {
       router.push('/league')
     } else if (matchId) {
       fetchMatch()
@@ -219,19 +222,35 @@ export default function RecordMatchPage() {
     }
   }
 
-  if (status === 'loading' || !session || session.user.role !== 'ADMIN' || loading) {
+  if (status === 'loading' || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'REFEREE') || loading) {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   if (!match) {
     return (
-      <div className="loading-container">
-        <div className="loading">Match not found</div>
-      </div>
+      <>
+        <MobileHeader
+          title="Record Match Result"
+          leftAction={
+            <button onClick={() => router.back()} className="back-btn">
+              <ChevronLeft size={20} />
+            </button>
+          }
+        />
+        <MobileContainer>
+          <div className="mobile-empty-state">
+            <div className="mobile-empty-icon">
+              <AlertCircle size={64} />
+            </div>
+            <h3 className="mobile-empty-title">Match not found</h3>
+          </div>
+        </MobileContainer>
+      </>
     )
   }
 
@@ -241,16 +260,19 @@ export default function RecordMatchPage() {
   ]
 
   return (
-    <div className="record-container">
-      <header className="record-header">
-        <Link href="/admin/matches" className="back-link">
-          <ArrowLeft size={20} /> Back to Matches
-        </Link>
-        <h1>Record Match Result</h1>
-      </header>
+    <>
+      <MobileHeader
+        title="Record Match Result"
+        subtitle={`${match.homeGroup.name} vs ${match.awayGroup.name}`}
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+      />
 
-      <main className="record-main">
-        <div className="match-overview">
+      <MobileContainer>
+        <MobileCard padding="large" className="match-overview">
           <div className="overview-teams">
             <div className="overview-team">
               <span className="overview-team-name">{match.homeGroup.name}</span>
@@ -266,10 +288,10 @@ export default function RecordMatchPage() {
             <span>{new Date(match.matchDate).toLocaleString()}</span>
             {match.location && <span> • {match.location}</span>}
           </div>
-        </div>
+        </MobileCard>
 
         <div className="record-sections">
-          <div className="record-section">
+          <MobileCard padding="large" className="record-section">
             <div className="section-header">
               <h2>Goals</h2>
               <button className="btn-add" onClick={() => setShowGoalForm(!showGoalForm)}>
@@ -359,9 +381,9 @@ export default function RecordMatchPage() {
                 ))
               )}
             </div>
-          </div>
+          </MobileCard>
 
-          <div className="record-section">
+          <MobileCard padding="large" className="record-section">
             <div className="section-header">
               <h2>Cards</h2>
               <button className="btn-add" onClick={() => setShowCardForm(!showCardForm)}>
@@ -462,7 +484,7 @@ export default function RecordMatchPage() {
                 ))
               )}
             </div>
-          </div>
+          </MobileCard>
         </div>
 
         {match.status !== 'COMPLETED' && (
@@ -475,7 +497,7 @@ export default function RecordMatchPage() {
             </p>
           </div>
         )}
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }

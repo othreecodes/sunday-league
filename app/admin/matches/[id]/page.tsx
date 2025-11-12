@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Trophy, Calendar, MapPin, Users, Target } from 'lucide-react'
+import { ChevronLeft, Trophy, Calendar, MapPin, Users, Target, Edit2, AlertCircle } from 'lucide-react'
+import MobileHeader from '@/components/mobile/MobileHeader'
+import MobileContainer from '@/components/mobile/MobileContainer'
+import MobileCard from '@/components/mobile/MobileCard'
 import './match-detail.css'
 
 interface Match {
@@ -64,7 +67,7 @@ export default function MatchDetailPage() {
 
     if (!session) {
       router.push('/auth/signin')
-    } else if (session.user.role !== 'ADMIN') {
+    } else if (session.user.role !== 'ADMIN' && session.user.role !== 'REFEREE') {
       router.push('/league')
     } else {
       fetchMatch()
@@ -85,43 +88,81 @@ export default function MatchDetailPage() {
     }
   }
 
-  if (status === 'loading' || !session || session.user.role !== 'ADMIN') {
+  if (status === 'loading' || !session || (session.user.role !== 'ADMIN' && session.user.role !== 'REFEREE')) {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading...</div>
+      <div className="mobile-loading">
+        <div className="spinner" />
+        <p>Loading...</p>
       </div>
     )
   }
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading">Loading match details...</div>
-      </div>
+      <>
+        <MobileHeader
+          title="Match Details"
+          leftAction={
+            <button onClick={() => router.back()} className="back-btn">
+              <ChevronLeft size={20} />
+            </button>
+          }
+        />
+        <MobileContainer>
+          <div className="mobile-loading">
+            <div className="spinner" />
+            <p>Loading match details...</p>
+          </div>
+        </MobileContainer>
+      </>
     )
   }
 
   if (!match) {
     return (
-      <div className="loading-container">
-        <div className="error-box">Match not found</div>
-      </div>
+      <>
+        <MobileHeader
+          title="Match Details"
+          leftAction={
+            <button onClick={() => router.back()} className="back-btn">
+              <ChevronLeft size={20} />
+            </button>
+          }
+        />
+        <MobileContainer>
+          <div className="mobile-empty-state">
+            <div className="mobile-empty-icon">
+              <AlertCircle size={64} />
+            </div>
+            <h3 className="mobile-empty-title">Match not found</h3>
+          </div>
+        </MobileContainer>
+      </>
     )
   }
 
   return (
-    <div className="match-detail-container">
-      <header className="match-detail-header">
-        <Link href="/admin/matches" className="back-link">
-          <ArrowLeft size={20} /> Back to Matches
-        </Link>
-        <h1><Trophy size={28} className="inline-icon" /> Match Details</h1>
-      </header>
+    <>
+      <MobileHeader
+        title="Match Details"
+        subtitle={match.season.name}
+        leftAction={
+          <button onClick={() => router.back()} className="back-btn">
+            <ChevronLeft size={20} />
+          </button>
+        }
+        rightAction={
+          match.status !== 'COMPLETED' ? (
+            <Link href={`/admin/matches/${match.id}/record`} className="add-btn">
+              <Edit2 size={20} />
+            </Link>
+          ) : null
+        }
+      />
 
-      <main className="match-detail-main">
-        <div className="match-info-card">
+      <MobileContainer>
+        <MobileCard padding="large" className="match-info-card">
           <div className="info-header">
-            <span className="season-badge">{match.season.name}</span>
             <span className={`status-badge status-${match.status.toLowerCase()}`}>
               {match.status}
             </span>
@@ -155,68 +196,80 @@ export default function MatchDetailPage() {
           {match.status !== 'COMPLETED' && (
             <div className="actions">
               <Link href={`/admin/matches/${match.id}/record`} className="btn-primary">
-                <Target size={20} />
+                <Edit2 size={20} />
                 Record Match Result
               </Link>
             </div>
           )}
-        </div>
+        </MobileCard>
 
         {match.goals.length > 0 && (
-          <div className="events-card">
-            <h3>
-              <Target size={24} />
-              Goals ({match.goals.length})
-            </h3>
-            <div className="events-list">
-              {match.goals.map((goal) => (
-                <div key={goal.id} className="event-item goal">
-                  <div className="event-minute">{goal.minute}'</div>
-                  <div className="event-details">
-                    <div className="event-player">{goal.scorer.name}</div>
-                    {goal.assist && (
-                      <div className="event-assist">Assist: {goal.assist.name}</div>
-                    )}
-                  </div>
-                </div>
-              ))}
+          <div className="mobile-section">
+            <div className="mobile-section-header">
+              <h2 className="mobile-section-title">
+                <Target size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                Goals
+              </h2>
+              <span className="match-count">{match.goals.length}</span>
             </div>
+            <MobileCard padding="none" className="events-card">
+              <div className="events-list">
+                {match.goals.map((goal) => (
+                  <div key={goal.id} className="event-item goal">
+                    <div className="event-minute">{goal.minute}'</div>
+                    <div className="event-details">
+                      <div className="event-player">{goal.scorer.name}</div>
+                      {goal.assist && (
+                        <div className="event-assist">Assist: {goal.assist.name}</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </MobileCard>
           </div>
         )}
 
         {match.cards.length > 0 && (
-          <div className="events-card">
-            <h3>
-              <Users size={24} />
-              Cards ({match.cards.length})
-            </h3>
-            <div className="events-list">
-              {match.cards.map((card) => (
-                <div key={card.id} className={`event-item card ${card.cardType.toLowerCase()}`}>
-                  <div className="event-minute">{card.minute}'</div>
-                  <div className="event-details">
-                    <div className="event-player">{card.user.name}</div>
-                    <div className={`card-badge ${card.cardType.toLowerCase()}`}>
-                      {card.cardType} CARD
-                    </div>
-                    {card.reason && (
-                      <div className="event-reason">{card.reason}</div>
-                    )}
-                  </div>
-                </div>
-              ))}
+          <div className="mobile-section">
+            <div className="mobile-section-header">
+              <h2 className="mobile-section-title">
+                <AlertCircle size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                Cards
+              </h2>
+              <span className="match-count">{match.cards.length}</span>
             </div>
+            <MobileCard padding="none" className="events-card">
+              <div className="events-list">
+                {match.cards.map((card) => (
+                  <div key={card.id} className={`event-item card ${card.cardType.toLowerCase()}`}>
+                    <div className="event-minute">{card.minute}'</div>
+                    <div className="event-details">
+                      <div className="event-player">{card.user.name}</div>
+                      <div className={`card-badge ${card.cardType.toLowerCase()}`}>
+                        {card.cardType} CARD
+                      </div>
+                      {card.reason && (
+                        <div className="event-reason">{card.reason}</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </MobileCard>
           </div>
         )}
 
         {match.goals.length === 0 && match.cards.length === 0 && match.status === 'SCHEDULED' && (
-          <div className="empty-events">
-            <Target size={48} />
-            <h3>No Events Yet</h3>
-            <p>Record the match result to add goals and cards</p>
+          <div className="mobile-empty-state">
+            <div className="mobile-empty-icon">
+              <Target size={64} />
+            </div>
+            <h3 className="mobile-empty-title">No Events Yet</h3>
+            <p className="mobile-empty-description">Record the match result to add goals and cards</p>
           </div>
         )}
-      </main>
-    </div>
+      </MobileContainer>
+    </>
   )
 }
