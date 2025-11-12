@@ -85,12 +85,6 @@ export default function AdminDashboard() {
       />
 
       <MobileContainer>
-        {/* Welcome Card */}
-        <MobileCard padding="large" className="welcome-card">
-          <h2 className="welcome-title">Welcome back, {session.user.name}</h2>
-          <p className="welcome-subtitle">Manage your Sunday league</p>
-        </MobileCard>
-
         {/* Admin Sections */}
         <div className="mobile-section">
           <div className="mobile-section-header">
