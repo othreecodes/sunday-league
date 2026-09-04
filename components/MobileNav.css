@@ -1,70 +1,280 @@
-.mobile-nav {
-  position: -webkit-sticky;
-  position: sticky;
+/* ==========================================================================
+   Primary navigation
+   < 1024px : fixed bottom tab bar
+   >= 1024px: fixed left sidebar (body carries a matching padding-left)
+   ========================================================================== */
+
+.app-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 900;
+
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  /* iOS frosted glass effect */
-  background: rgba(255, 255, 255, 0.72);
+  align-items: stretch;
+
+  background: rgba(11, 17, 29, 0.82);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
-  padding: 0;
-  padding-top: 8px;
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
-  z-index: 9999;
-  box-shadow: none; /* iOS tab bars don't have shadows */
-  /* iOS specific fixes */
-  -webkit-transform: translate3d(0, 0, 0);
+  border-top: 1px solid var(--line-neutral);
+
+  padding-bottom: var(--safe-area-inset-bottom);
   transform: translate3d(0, 0, 0);
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  will-change: transform;
 }
 
-.mobile-nav-item {
+/* Brand + account blocks are sidebar-only */
+.app-nav-brand,
+.app-nav-footer {
+  display: none;
+}
+
+.app-nav-items {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  flex: 1;
+  min-width: 0;
+}
+
+.app-nav-item {
+  position: relative;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 0;
-  min-width: 60px;
-  flex: 1;
-  color: #8E8E93; /* iOS inactive tab color */
-  transition: transform 0.1s ease-out, color 0.15s ease;
+  gap: 3px;
+  height: var(--tabbar-h);
+  color: var(--ink-3);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.mobile-nav-item span {
-  font-size: 10px; /* iOS tab bar label size */
-  font-weight: 500;
-  letter-spacing: 0.12px;
-  margin-top: 1px;
+.app-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.mobile-nav-item.active {
-  color: #007AFF; /* iOS active tab color (system blue) */
+.app-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-.mobile-nav-item:active {
-  transform: scale(0.9);
-  opacity: 0.6;
+.app-nav-item.active {
+  color: var(--lime);
 }
 
-/* Hide mobile nav on desktop */
-@media (min-width: 768px) {
-  .mobile-nav {
-    display: none;
+/* Lit bar above the active tab — the scoreboard cue */
+.app-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  background: var(--lime);
+  box-shadow: 0 0 12px rgba(174, 243, 95, 0.7);
+}
+
+.app-nav-item:active {
+  transform: scale(0.92);
+}
+
+/* --------------------------------------------------------------------------
+   Desktop sidebar
+   -------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .app-nav {
+    top: 0;
+    right: auto;
+    bottom: 0;
+    width: calc(var(--sidebar-w) + var(--safe-area-inset-left));
+    flex-direction: column;
+    align-items: stretch;
+
+    background: var(--pitch-950);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: none;
+    border-right: 1px solid var(--line-neutral);
+
+    padding: 24px 14px calc(18px + var(--safe-area-inset-bottom));
+    padding-left: calc(14px + var(--safe-area-inset-left));
   }
-}
 
-/* Add padding to body to account for fixed bottom nav */
-body {
-  padding-bottom: env(safe-area-inset-bottom);
+  /* Brand */
+  .app-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 4px 8px 22px;
+    text-decoration: none;
+  }
+
+  .app-nav-brand-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .app-nav-brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .app-nav-brand-sub {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Items */
+  .app-nav-items {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .app-nav-item {
+    flex: 0 0 auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: var(--r-sm);
+    color: var(--ink-2);
+  }
+
+  .app-nav-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+  }
+
+  .app-nav-item:active {
+    transform: none;
+  }
+
+  .app-nav-label {
+    font-size: var(--t-body);
+    font-weight: 550;
+    letter-spacing: -0.01em;
+  }
+
+  .app-nav-item.active {
+    background: var(--lime-wash);
+    color: var(--lime);
+  }
+
+  /* Left rail marker replaces the top bar */
+  .app-nav-item.active::before {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 20px;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* Account footer */
+  .app-nav-footer {
+    display: block;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-neutral);
+  }
+
+  .app-nav-account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 4px 6px 6px;
+    min-width: 0;
+  }
+
+  .app-nav-avatar {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--lime);
+    color: var(--on-lime);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .app-nav-account-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .app-nav-account-name {
+    font-size: var(--t-sm);
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-nav-account-role {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .app-nav-signout {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    border-radius: var(--r-sm);
+    color: var(--ink-3);
+  }
+
+  .app-nav-signout:hover {
+    background: var(--coral-wash);
+    color: var(--coral);
+  }
+
+  .app-nav-signin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    border-radius: var(--r-sm);
+    background: var(--lime);
+    color: var(--on-lime);
+    font-size: var(--t-body);
+    font-weight: 650;
+  }
+
+  .app-nav-signin:hover {
+    background: var(--lime-bright);
+  }
 }

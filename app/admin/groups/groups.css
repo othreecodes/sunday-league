@@ -1,20 +1,20 @@
 .groups-container {
   min-height: 100vh;
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .groups-header {
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   padding: 1.5rem 1rem;
-  border-bottom: 3px solid #e90052;
+  border-bottom: 3px solid var(--lime);
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--ink);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: opacity 0.2s;
@@ -51,8 +51,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -61,23 +61,23 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #c4003e;
+  background: var(--lime-deep);
 }
 
 .btn-primary:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }
 
 .warning-text {
-  color: #dc2626;
+  color: var(--coral);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
 
 .group-form-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -86,7 +86,7 @@
 .group-form-card h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   margin-bottom: 1.5rem;
 }
 
@@ -104,14 +104,14 @@
 
 .form-group label {
   font-weight: 500;
-  color: #374151;
+  color: var(--ink-2);
   font-size: 0.875rem;
 }
 
 .form-group input,
 .form-group select {
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 1rem;
   transition: border-color 0.2s;
@@ -120,13 +120,13 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .btn-submit {
   padding: 0.75rem 1.5rem;
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -135,11 +135,11 @@
 }
 
 .btn-submit:hover {
-  background: #000;
+  background: var(--pitch-950);
 }
 
 .btn-submit:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }
 
@@ -150,25 +150,25 @@
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
 }
 
 .empty-state svg {
-  color: #9ca3af;
+  color: var(--ink-3);
   margin-bottom: 1rem;
 }
 
 .empty-state h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   margin-bottom: 0.5rem;
 }
 
 .empty-state p {
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .groups-grid {
@@ -178,15 +178,15 @@
 }
 
 .group-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 1.5rem;
   transition: border-color 0.2s;
 }
 
 .group-card:hover {
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .group-header {
@@ -201,12 +201,12 @@
 .group-header h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .season-badge {
-  background: #f3f4f6;
-  color: #1f2937;
+  background: var(--pitch-800);
+  color: var(--ink);
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
   font-size: 0.75rem;
@@ -218,7 +218,7 @@
   gap: 2rem;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line-neutral);
 }
 
 .stat-item {
@@ -230,12 +230,12 @@
 .stat-value {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .stat-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--ink-3);
   text-transform: uppercase;
 }
 
@@ -249,42 +249,42 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .btn-edit {
-  color: #059669;
-  border-color: #059669;
+  color: var(--lime);
+  border-color: var(--lime-deep);
 }
 
 .btn-edit:hover {
-  background: #059669;
-  color: white;
+  background: var(--lime-deep);
+  color: var(--on-lime);
 }
 
 .btn-delete {
-  color: #dc2626;
+  color: var(--coral);
   padding: 0.5rem;
 }
 
 .btn-delete:hover {
-  background: #dc2626;
-  color: white;
-  border-color: #dc2626;
+  background: var(--coral);
+  color: var(--on-lime);
+  border-color: var(--coral);
 }
 
 .loading {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .loading-container {
@@ -318,8 +318,8 @@
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   flex-wrap: wrap;
 }
@@ -332,30 +332,30 @@
 
 .filter-group label {
   font-weight: 500;
-  color: #374151;
+  color: var(--ink-2);
   font-size: 0.875rem;
   white-space: nowrap;
 }
 
 .filter-select {
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 0.875rem;
-  background: white;
+  background: var(--surface);
   cursor: pointer;
   transition: border-color 0.2s;
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .view-switcher {
   display: flex;
   gap: 0.25rem;
-  background: #f3f4f6;
+  background: var(--pitch-800);
   padding: 0.25rem;
   border-radius: 0.375rem;
 }
@@ -367,25 +367,25 @@
   border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.2s;
-  color: #6b7280;
+  color: var(--ink-3);
   display: flex;
   align-items: center;
 }
 
 .view-btn:hover {
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .view-btn.active {
-  background: white;
-  color: #e90052;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: var(--surface);
+  color: var(--lime);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
 }
 
 /* List/Table View */
 .groups-table {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -396,20 +396,20 @@
 }
 
 .groups-table th {
-  background: #f9fafb;
+  background: var(--pitch-800);
   padding: 0.75rem 1rem;
   text-align: left;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-neutral);
 }
 
 .groups-table td {
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line-neutral);
   font-size: 0.875rem;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .groups-table tbody tr:last-child td {
@@ -417,12 +417,12 @@
 }
 
 .groups-table tbody tr:hover {
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .group-name-cell {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .actions-cell {

@@ -136,7 +136,7 @@ export default function MatchDetail() {
     // Check if this player has another yellow card before this one
     const previousCards = match!.cards.slice(0, cardIndex)
     return previousCards.some(c =>
-      c.userId === card.userId && c.cardType === 'YELLOW'
+      c.user.id === card.user.id && c.cardType === 'YELLOW'
     )
   }
 
@@ -274,7 +274,7 @@ export default function MatchDetail() {
           <div className="mobile-section">
             <div className="mobile-section-header">
               <h2 className="mobile-section-title">
-                <Target size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                <Target size={16} />
                 Goals
               </h2>
               <span className="match-count">{match.goals.length}</span>
@@ -315,7 +315,7 @@ export default function MatchDetail() {
           <div className="mobile-section">
             <div className="mobile-section-header">
               <h2 className="mobile-section-title">
-                <AlertCircle size={24} style={{ display: 'inline', marginRight: '0.5rem' }} />
+                <AlertCircle size={16} />
                 Cards
               </h2>
               <span className="match-count">{match.cards.length}</span>
@@ -340,11 +340,11 @@ export default function MatchDetail() {
                         <span className="event-secondary">
                           {isSecondYellow ? (
                             <>
-                              <span style={{ color: '#dc2626', fontWeight: 700 }}>SECOND YELLOW</span>
-                              {' → RED CARD (Sent Off)'}
+                              <span className="second-yellow">Second yellow</span>
+                              {' → sent off'}
                             </>
                           ) : (
-                            `${card.cardType || 'Unknown'} Card`
+                            `${(card.cardType || 'Unknown').toLowerCase()} card`
                           )}
                         </span>
                         <span className="event-team">

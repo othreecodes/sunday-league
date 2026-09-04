@@ -8,6 +8,7 @@ import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
 import './settings.css'
+import { DEFAULT_LEAGUE_NAME } from '@/lib/brand'
 
 interface Settings {
   id: string
@@ -21,7 +22,7 @@ export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings | null>(null)
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
-    leagueName: 'SundayLeague FC',
+    leagueName: DEFAULT_LEAGUE_NAME,
     matchesPerSeason: 1
   })
   const [submitting, setSubmitting] = useState(false)

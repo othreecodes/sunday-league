@@ -1,169 +1,194 @@
+/* ==========================================================================
+   Auth (sign in / register)
+   ========================================================================== */
+
 .auth-container {
-  min-height: 100vh;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F2F2F7; /* iOS system background */
-  padding: 16px;
+  min-height: 100vh;
+  padding: 32px var(--gutter) calc(var(--tabbar-h) + 40px);
+}
+
+@media (min-width: 1024px) {
+  .auth-container {
+    padding-bottom: 40px;
+  }
 }
 
 .auth-card {
-  background: white;
-  border-radius: 20px; /* iOS modal radius */
-  box-shadow: none;
   width: 100%;
   max-width: 400px;
-  padding: 32px 24px;
+  padding: 30px 24px;
+  border-radius: var(--r-xl);
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(174, 243, 95, 0.12), transparent 60%),
+    var(--pitch-850);
+  border: 1px solid var(--line-neutral);
+  box-shadow: var(--rim), var(--shadow-lg);
 }
 
 .auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 26px;
 }
 
 .auth-header h1 {
-  font-size: 28px; /* iOS Title 1 */
+  font-size: 25px;
   font-weight: 700;
-  color: #000000;
-  margin-bottom: 8px;
-  letter-spacing: 0.364px;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin: 14px 0 0;
 }
 
 .auth-header p {
-  color: #8E8E93; /* iOS secondary label */
-  font-size: 15px; /* iOS subheadline */
-  letter-spacing: -0.24px;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  margin: 5px 0 0;
 }
 
+/* --------------------------------------------------------------------------
+   Form
+   -------------------------------------------------------------------------- */
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-group label {
-  font-weight: 600;
-  color: #000000;
-  font-size: 15px; /* iOS subheadline */
-  letter-spacing: -0.24px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 14px 12px;
-  border: 0.5px solid rgba(60, 60, 67, 0.29); /* iOS separator */
-  border-radius: 10px; /* iOS input radius */
-  font-size: 17px; /* iOS body */
-  letter-spacing: -0.408px;
-  background: #F2F2F7; /* iOS tertiary fill */
-  transition: border-color 0.15s ease, background 0.15s ease;
+  width: 100%;
+  height: 46px;
+  padding: 0 13px;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--pitch-900);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #007AFF; /* iOS system blue */
-  background: white;
-  box-shadow: none;
+.form-group textarea {
+  height: auto;
+  padding: 12px 13px;
+  min-height: 90px;
+}
+
+.form-group input:focus {
+  border-color: var(--lime);
+  background: var(--pitch-800);
 }
 
 .form-group input:disabled {
-  background-color: #E5E5EA;
+  opacity: 0.55;
   cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .error-message {
-  padding: 12px;
-  background: rgba(255, 59, 48, 0.1); /* iOS red tint */
-  border: 0.5px solid #FF3B30; /* iOS system red */
-  border-radius: 10px;
-  color: #FF3B30;
-  font-size: 15px;
-  letter-spacing: -0.24px;
+  padding: 11px 13px;
+  border-radius: var(--r-sm);
+  background: var(--coral-wash);
+  border: 1px solid rgba(255, 95, 87, 0.32);
+  color: var(--coral);
+  font-size: var(--t-sm);
+  font-weight: 550;
 }
 
 .success-message {
-  padding: 12px;
-  background: rgba(52, 199, 89, 0.1); /* iOS green tint */
-  border: 0.5px solid #34C759; /* iOS system green */
-  border-radius: 10px;
-  color: #34C759;
-  font-size: 15px;
-  letter-spacing: -0.24px;
+  padding: 11px 13px;
+  border-radius: var(--r-sm);
+  background: var(--lime-wash);
+  border: 1px solid rgba(174, 243, 95, 0.32);
+  color: var(--lime);
+  font-size: var(--t-sm);
+  font-weight: 550;
 }
 
 .btn {
-  display: inline-block;
-  padding: 14px 20px;
-  border-radius: 13px; /* iOS button radius */
-  font-weight: 600;
-  text-align: center;
-  transition: transform 0.1s ease-out, opacity 0.15s ease;
-  cursor: pointer;
-  border: none;
-  font-size: 17px; /* iOS body */
-  letter-spacing: -0.408px;
-  -webkit-tap-highlight-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: var(--r-sm);
+  font-size: var(--t-body);
+  font-weight: 650;
 }
 
 .btn-primary {
-  background: #007AFF; /* iOS system blue */
-  color: white;
-  width: 100%;
+  margin-top: 5px;
+  background: var(--lime);
+  color: var(--on-lime);
+  box-shadow: var(--glow-lime);
 }
 
 .btn-primary:hover:not(:disabled) {
-  opacity: 0.85;
+  background: var(--lime-bright);
 }
 
-.btn-primary:active:not(:disabled) {
-  transform: scale(0.96);
-  opacity: 0.7;
+.btn-secondary {
+  background: var(--control);
+  color: var(--ink);
 }
 
-.btn-primary:disabled {
-  background: #C7C7CC; /* iOS quaternary label */
-  cursor: not-allowed;
-  transform: none;
-  opacity: 0.5;
+.btn-secondary:hover:not(:disabled) {
+  background: var(--control-hover);
 }
 
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
 .auth-footer {
-  margin-top: 24px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-neutral);
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
 .auth-footer p {
-  color: #8E8E93; /* iOS secondary label */
-  font-size: 15px;
-  letter-spacing: -0.24px;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  margin: 0 0 10px;
 }
 
 .link {
-  color: #007AFF; /* iOS system blue */
+  color: var(--lime);
   font-weight: 600;
-  text-decoration: none;
-  transition: opacity 0.15s ease;
 }
 
-.link:active {
-  opacity: 0.3;
+.link:hover {
+  color: var(--lime-bright);
+  text-decoration: underline;
 }
 
-@media (min-width: 640px) {
-  .auth-card {
-    padding: 2.5rem;
-  }
+.link-muted {
+  display: inline-block;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+.link-muted:hover {
+  color: var(--ink-2);
 }

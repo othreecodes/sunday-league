@@ -4,12 +4,12 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useSettings } from '@/hooks/useSettings'
+import BrandMark from '@/components/BrandMark'
+import { BRAND_NAME } from '@/lib/brand'
 import './signin.css'
 
 export default function SignIn() {
   const router = useRouter()
-  const { leagueName } = useSettings()
   const [nickname, setNickname] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -34,7 +34,7 @@ export default function SignIn() {
         router.refresh()
       }
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError('Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -44,13 +44,16 @@ export default function SignIn() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>⚽ {leagueName}</h1>
+          {/* Static brand: the old version rendered a DB value, which flashed
+              a different name on every load. */}
+          <BrandMark size={52} />
+          <h1>{BRAND_NAME}</h1>
           <p>Sign in to your account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {error && (
-            <div className="error-message">
+            <div className="error-message" role="alert">
               {error}
             </div>
           )}
@@ -63,6 +66,9 @@ export default function SignIn() {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               required
+              autoComplete="username"
+              autoCapitalize="none"
+              autoCorrect="off"
               placeholder="username"
               disabled={loading}
             />
@@ -76,29 +82,26 @@ export default function SignIn() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete="current-password"
               placeholder="••••••••"
               disabled={loading}
             />
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/auth/register" className="link">
-              Register here
+              Register
             </Link>
           </p>
-          <Link href="/" className="link">
-            Back to Home
+          <Link href="/" className="link link-muted">
+            Back to home
           </Link>
         </div>
       </div>

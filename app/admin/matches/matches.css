@@ -1,20 +1,20 @@
 .matches-container {
   min-height: 100vh;
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .matches-header {
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   padding: 1.5rem 1rem;
-  border-bottom: 3px solid #e90052;
+  border-bottom: 3px solid var(--lime);
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--ink);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: opacity 0.2s;
@@ -50,8 +50,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -60,23 +60,23 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #c4003e;
+  background: var(--lime-deep);
 }
 
 .btn-primary:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }
 
 .warning-text {
-  color: #dc2626;
+  color: var(--coral);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
 
 .match-form-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 2rem;
   margin-bottom: 2rem;
@@ -85,7 +85,7 @@
 .match-form-card h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   margin-bottom: 1.5rem;
 }
 
@@ -109,14 +109,14 @@
 
 .form-group label {
   font-weight: 500;
-  color: #374151;
+  color: var(--ink-2);
   font-size: 0.875rem;
 }
 
 .form-group input,
 .form-group select {
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 1rem;
   transition: border-color 0.2s;
@@ -125,18 +125,18 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .form-group select:disabled {
-  background: #f3f4f6;
+  background: var(--pitch-800);
   cursor: not-allowed;
 }
 
 .btn-submit {
   padding: 0.75rem 1.5rem;
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -145,11 +145,11 @@
 }
 
 .btn-submit:hover {
-  background: #000;
+  background: var(--pitch-950);
 }
 
 .btn-submit:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }
 
@@ -160,25 +160,25 @@
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
 }
 
 .empty-state svg {
-  color: #9ca3af;
+  color: var(--ink-3);
   margin-bottom: 1rem;
 }
 
 .empty-state h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   margin-bottom: 0.5rem;
 }
 
 .empty-state p {
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .matches-grid {
@@ -188,15 +188,15 @@
 }
 
 .match-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 1.5rem;
   transition: border-color 0.2s;
 }
 
 .match-card:hover {
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .match-header {
@@ -219,23 +219,23 @@
 }
 
 .status-scheduled {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--cyan-wash);
+  color: var(--cyan);
 }
 
 .status-progress {
-  background: #dcfce7;
-  color: #15803d;
+  background: var(--lime-wash);
+  color: var(--lime);
 }
 
 .status-completed {
-  background: #f3f4f6;
-  color: #1f2937;
+  background: var(--pitch-800);
+  color: var(--ink);
 }
 
 .season-badge {
-  background: #f3f4f6;
-  color: #1f2937;
+  background: var(--pitch-800);
+  color: var(--ink);
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
   font-size: 0.75rem;
@@ -248,7 +248,7 @@
   align-items: center;
   margin-bottom: 1rem;
   padding: 1rem;
-  background: #f9fafb;
+  background: var(--pitch-800);
   border-radius: 0.5rem;
 }
 
@@ -262,20 +262,20 @@
 
 .team-name {
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   text-align: center;
 }
 
 .team-score {
   font-size: 2rem;
   font-weight: bold;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .match-vs {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--ink-3);
   padding: 0 1rem;
 }
 
@@ -285,7 +285,7 @@
   gap: 0.5rem;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line-neutral);
 }
 
 .info-item {
@@ -296,7 +296,7 @@
 
 .info-label {
   font-weight: 500;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .match-actions {
@@ -310,52 +310,52 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .btn-record {
-  color: #e90052;
-  border-color: #e90052;
+  color: var(--lime);
+  border-color: var(--lime);
 }
 
 .btn-record:hover {
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
 }
 
 .btn-view {
-  color: #1e40af;
-  border-color: #1e40af;
+  color: var(--cyan);
+  border-color: var(--cyan);
 }
 
 .btn-view:hover {
-  background: #1e40af;
-  color: white;
+  background: var(--cyan);
+  color: var(--ink);
 }
 
 .btn-delete {
-  color: #dc2626;
+  color: var(--coral);
   padding: 0.5rem;
 }
 
 .btn-delete:hover {
-  background: #dc2626;
-  color: white;
-  border-color: #dc2626;
+  background: var(--coral);
+  color: var(--on-lime);
+  border-color: var(--coral);
 }
 
 .loading {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .loading-container {
@@ -408,8 +408,8 @@
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   flex-wrap: wrap;
 }
@@ -422,30 +422,30 @@
 
 .filter-group label {
   font-weight: 500;
-  color: #374151;
+  color: var(--ink-2);
   font-size: 0.875rem;
   white-space: nowrap;
 }
 
 .filter-select {
   padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 0.875rem;
-  background: white;
+  background: var(--surface);
   cursor: pointer;
   transition: border-color 0.2s;
 }
 
 .filter-select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .view-switcher {
   display: flex;
   gap: 0.25rem;
-  background: #f3f4f6;
+  background: var(--pitch-800);
   padding: 0.25rem;
   border-radius: 0.375rem;
 }
@@ -457,25 +457,25 @@
   border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.2s;
-  color: #6b7280;
+  color: var(--ink-3);
   display: flex;
   align-items: center;
 }
 
 .view-btn:hover {
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .view-btn.active {
-  background: white;
-  color: #e90052;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: var(--surface);
+  color: var(--lime);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.11);
 }
 
 /* List/Table View */
 .matches-table {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -486,20 +486,20 @@
 }
 
 .matches-table th {
-  background: #f9fafb;
+  background: var(--pitch-800);
   padding: 0.75rem 1rem;
   text-align: left;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-neutral);
 }
 
 .matches-table td {
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--line-neutral);
   font-size: 0.875rem;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .matches-table tbody tr:last-child td {
@@ -507,12 +507,12 @@
 }
 
 .matches-table tbody tr:hover {
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .score-cell {
   font-weight: 600;
-  color: #e90052;
+  color: var(--lime);
 }
 
 .actions-cell {
@@ -530,7 +530,7 @@
 .back-btn {
   background: none;
   border: none;
-  color: #e90052;
+  color: var(--lime);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -547,9 +547,9 @@
 }
 
 .add-btn {
-  background: #e90052;
+  background: var(--lime);
   border: none;
-  color: white;
+  color: var(--on-lime);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -562,17 +562,17 @@
 }
 
 .add-btn:active {
-  background: #c4003e;
+  background: var(--lime-deep);
 }
 
 .add-btn:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   opacity: 0.5;
 }
 
 .mobile-warning {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--coral-wash);
+  color: var(--coral);
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
@@ -606,7 +606,7 @@
 .filter-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--ink-3);
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
@@ -614,12 +614,12 @@
 .season-filter-select,
 .team-filter-select {
   padding: 0.625rem 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  background: white;
-  color: #1e1e1e;
+  background: var(--surface);
+  color: var(--ink);
   cursor: pointer;
   transition: border-color 0.2s;
 }
@@ -627,13 +627,13 @@
 .season-filter-select:focus,
 .team-filter-select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .view-toggle {
   display: flex;
   gap: 0.25rem;
-  background: #f3f4f6;
+  background: var(--pitch-800);
   padding: 0.25rem;
   border-radius: 0.5rem;
   align-self: flex-start;
@@ -647,7 +647,7 @@
   min-height: 40px;
   background: transparent;
   border: none;
-  color: #6b7280;
+  color: var(--ink-3);
   cursor: pointer;
   border-radius: 0.375rem;
   transition: all 0.2s;
@@ -659,15 +659,15 @@
 }
 
 .view-toggle-btn.active {
-  background: white;
-  color: #e90052;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: var(--surface);
+  color: var(--lime);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .form-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0 0 1.5rem 0;
 }
 
@@ -678,14 +678,14 @@
   justify-content: center;
   padding: 3rem 1rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #e5e7eb;
-  border-top-color: #e90052;
+  border: 3px solid var(--line-neutral);
+  border-top-color: var(--lime);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -712,24 +712,24 @@
   justify-content: center;
   padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .mobile-empty-icon {
-  color: #d1d5db;
+  color: var(--ink-4);
   margin-bottom: 1rem;
 }
 
 .mobile-empty-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0 0 0.5rem 0;
 }
 
 .mobile-empty-description {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
   margin: 0;
 }
 
@@ -756,15 +756,15 @@
 }
 
 .matches-table thead {
-  background: #f9fafb;
-  border-bottom: 2px solid #e5e7eb;
+  background: var(--pitch-800);
+  border-bottom: 2px solid var(--line-neutral);
 }
 
 .matches-table th {
   padding: 8px 4px;
   text-align: left;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--ink-3);
   text-transform: uppercase;
   font-size: 10px;
   letter-spacing: 0.025em;
@@ -797,17 +797,17 @@
 }
 
 .matches-table tbody .table-row {
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--line-neutral);
   transition: background 0.2s;
 }
 
 .matches-table tbody .table-row:active {
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .matches-table td {
   padding: 10px 4px;
-  color: #1e1e1e;
+  color: var(--ink);
   vertical-align: middle;
 }
 
@@ -820,7 +820,7 @@
 
 .team-name-table {
   font-weight: 600;
-  color: #1e1e1e;
+  color: var(--ink);
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -829,14 +829,14 @@
 
 .score-table {
   font-weight: 700;
-  color: #e90052;
+  color: var(--lime);
   font-size: 14px;
 }
 
 .season-badge-small {
   display: inline-block;
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--pitch-800);
+  color: var(--ink-3);
   padding: 1px 6px;
   border-radius: 0.25rem;
   font-size: 9px;
@@ -845,7 +845,7 @@
 
 .date-text {
   font-size: 12px;
-  color: #1e1e1e;
+  color: var(--ink);
 }
 
 .actions-group {
@@ -860,43 +860,43 @@
   justify-content: center;
   min-width: 36px;
   min-height: 36px;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.375rem;
   cursor: pointer;
   transition: all 0.2s;
-  color: #1f2937;
+  color: var(--ink);
   padding: 0.5rem;
 }
 
 .action-btn.btn-record {
-  color: #e90052;
-  border-color: #e90052;
+  color: var(--lime);
+  border-color: var(--lime);
 }
 
 .action-btn.btn-record:active {
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
 }
 
 .action-btn.btn-view {
-  color: #1e40af;
-  border-color: #1e40af;
+  color: var(--cyan);
+  border-color: var(--cyan);
 }
 
 .action-btn.btn-view:active {
-  background: #1e40af;
-  color: white;
+  background: var(--cyan);
+  color: var(--ink);
 }
 
 .action-btn.btn-delete {
-  color: #dc2626;
-  border-color: #dc2626;
+  color: var(--coral);
+  border-color: var(--coral);
 }
 
 .action-btn.btn-delete:active {
-  background: #dc2626;
-  color: white;
+  background: var(--coral);
+  color: var(--on-lime);
 }
 
 /* Grid View Card Actions */
@@ -905,45 +905,45 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   text-decoration: none;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .btn-action.btn-record {
-  color: #e90052;
-  border-color: #e90052;
+  color: var(--lime);
+  border-color: var(--lime);
 }
 
 .btn-action.btn-record:active {
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
 }
 
 .btn-action.btn-view {
-  color: #1e40af;
-  border-color: #1e40af;
+  color: var(--cyan);
+  border-color: var(--cyan);
 }
 
 .btn-action.btn-view:active {
-  background: #1e40af;
-  color: white;
+  background: var(--cyan);
+  color: var(--ink);
 }
 
 .btn-action.btn-delete {
-  color: #dc2626;
-  border-color: #dc2626;
+  color: var(--coral);
+  border-color: var(--coral);
 }
 
 .btn-action.btn-delete:active {
-  background: #dc2626;
-  color: white;
+  background: var(--coral);
+  color: var(--on-lime);
 }
 
 /* Tablet */

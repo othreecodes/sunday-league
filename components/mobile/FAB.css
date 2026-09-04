@@ -1,47 +1,59 @@
+/* ==========================================================================
+   Floating action button — visible on every breakpoint (was hidden >768px,
+   which left desktop admins with no way to create anything).
+   ========================================================================== */
+
 .fab {
   position: fixed;
-  bottom: calc(70px + env(safe-area-inset-bottom));
-  right: 1rem;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  border: none;
-  display: flex;
+  right: var(--gutter);
+  bottom: calc(var(--tabbar-h) + 16px + var(--safe-area-inset-bottom));
+  z-index: 800;
+
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 50;
-  font-weight: 600;
-  font-size: 1rem;
+  gap: 8px;
+
+  width: 56px;
+  height: 56px;
+  min-height: 56px;
+  border-radius: var(--r-lg);
+
+  font-size: var(--t-body);
+  font-weight: 650;
+  box-shadow: var(--shadow-md), var(--glow-lime);
+  transition: transform var(--dur-fast) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              background-color var(--dur-fast) var(--ease);
 }
 
 .fab-primary {
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
+}
+
+.fab-primary:hover {
+  background: var(--lime-bright);
 }
 
 .fab-secondary {
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
+  box-shadow: var(--shadow-md);
 }
 
-.fab:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
+.fab-secondary:hover {
+  background: var(--pitch-600);
 }
 
 .fab:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(0.94);
 }
 
 .fab-extended {
   width: auto;
-  padding: 0 1.5rem;
-  border-radius: 28px;
+  padding: 0 20px;
+  border-radius: var(--r-pill);
 }
 
 .fab-icon {
@@ -54,9 +66,10 @@
   white-space: nowrap;
 }
 
-/* Hide on desktop */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .fab {
-    display: none;
+    /* Tab bar is gone; sit clear of the content column instead */
+    bottom: 32px;
+    right: 32px;
   }
 }

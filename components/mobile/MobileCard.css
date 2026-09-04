@@ -1,12 +1,21 @@
+/* ==========================================================================
+   Card surface
+   ========================================================================== */
+
 .mobile-card {
-  background: #ffffff;
-  border-radius: 13px; /* iOS grouped list corner radius */
-  box-shadow: none;
-  overflow: hidden;
-  border: 0.5px solid rgba(0, 0, 0, 0.04);
-  text-align: left;
+  position: relative;
+  display: block;
   width: 100%;
-  transition: transform 0.1s ease-out, opacity 0.15s ease;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
+  border-radius: var(--r-lg);
+  box-shadow: var(--rim);
+  overflow: hidden;
+  color: var(--ink);
+  transition: border-color var(--dur-fast) var(--ease),
+              background-color var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
 }
 
 .mobile-card.clickable {
@@ -14,88 +23,86 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.mobile-card.clickable:hover {
+  background: var(--surface-raised);
+  border-color: var(--line-strong);
+}
+
 .mobile-card.clickable:active {
-  transform: scale(0.97);
-  opacity: 0.9;
+  transform: scale(0.985);
 }
 
-.mobile-card.padding-none {
-  padding: 0;
+.mobile-card.padding-none { padding: 0; }
+.mobile-card.padding-small { padding: 12px; }
+.mobile-card.padding-medium { padding: 16px; }
+.mobile-card.padding-large { padding: 20px; }
+
+@media (min-width: 1024px) {
+  .mobile-card.padding-medium { padding: 18px; }
+  .mobile-card.padding-large { padding: 26px; }
 }
 
-.mobile-card.padding-small {
-  padding: 12px;
-}
-
-.mobile-card.padding-medium {
-  padding: 16px; /* iOS standard padding */
-}
-
-.mobile-card.padding-large {
-  padding: 20px;
-}
-
-/* Card sections */
+/* --------------------------------------------------------------------------
+   Card internals
+   -------------------------------------------------------------------------- */
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   margin-bottom: 12px;
 }
 
 .card-title {
-  font-size: 17px; /* iOS body */
-  font-weight: 600;
-  color: #000000;
+  font-size: var(--t-lg);
+  font-weight: 650;
+  color: var(--ink);
+  letter-spacing: -0.02em;
   margin: 0;
-  letter-spacing: -0.408px;
 }
 
 .card-subtitle {
-  font-size: 13px; /* iOS footnote */
-  color: #8E8E93;
-  margin: 4px 0 0 0;
-  letter-spacing: -0.078px;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  margin: 3px 0 0;
 }
 
 .card-body {
-  color: #000000;
-  font-size: 17px;
-  letter-spacing: -0.408px;
+  color: var(--ink);
+  font-size: var(--t-body);
 }
 
 .card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 0.5px solid rgba(60, 60, 67, 0.29); /* iOS separator */
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-neutral);
 }
 
 .card-divider {
-  height: 0.5px;
-  background: rgba(60, 60, 67, 0.29); /* iOS separator */
-  margin: 12px 0;
+  height: 1px;
+  background: var(--line-neutral);
+  margin: 14px 0;
 }
 
 .card-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
+  gap: 12px;
+  padding: 9px 0;
 }
 
 .card-label {
-  font-size: 15px; /* iOS subheadline */
-  color: #8E8E93; /* iOS secondary label */
-  font-weight: 400;
-  letter-spacing: -0.24px;
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  font-weight: 500;
 }
 
 .card-value {
-  font-size: 17px; /* iOS body */
-  color: #000000;
+  font-size: var(--t-body);
+  color: var(--ink);
   font-weight: 600;
-  letter-spacing: -0.408px;
 }

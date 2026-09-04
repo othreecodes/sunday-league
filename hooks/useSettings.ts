@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { DEFAULT_LEAGUE_NAME } from '@/lib/brand'
 
 interface Settings {
   id: string
@@ -28,5 +29,5 @@ export function useSettings() {
     fetchSettings()
   }, [])
 
-  return { settings, loading, leagueName: settings?.leagueName || 'SundayLeague FC' }
+  return { settings, loading, leagueName: settings?.leagueName || DEFAULT_LEAGUE_NAME }
 }

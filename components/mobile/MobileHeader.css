@@ -1,87 +1,150 @@
-.mobile-header {
+/* ==========================================================================
+   Page header — sticky on every breakpoint (previously hidden above 768px)
+   ========================================================================== */
+
+.page-header {
   position: sticky;
   top: 0;
-  /* iOS navigation bar frosted glass */
-  background: rgba(255, 255, 255, 0.72);
+  z-index: 500;
+  background: rgba(11, 17, 29, 0.78);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding-top: max(8px, env(safe-area-inset-top));
+  border-bottom: 1px solid var(--line-neutral);
+  padding-top: var(--safe-area-inset-top);
 }
 
-.mobile-header-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px; /* iOS standard padding */
-  height: 44px; /* Fixed iOS nav bar height */
+.page-header-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
 }
 
-.mobile-header-back {
-  background: none;
-  border: none;
-  color: #007AFF; /* iOS system blue */
+/* Back / action bar */
+.page-header-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 8px;
-  min-width: 44px;
+  gap: 8px;
   min-height: 44px;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
-  -webkit-tap-highlight-color: transparent;
+  margin: 0 calc(var(--gutter) * -1 + 4px);
+  padding: 4px calc(var(--gutter) - 4px) 0;
 }
 
-.mobile-header-back:active {
-  opacity: 0.3; /* iOS button press feedback */
+.page-header-left {
+  display: flex;
+  align-items: center;
 }
 
-.mobile-header-spacer {
+.page-header-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px 8px 6px;
+  min-height: 40px;
+  border-radius: var(--r-sm);
+  color: var(--lime);
+  font-size: var(--t-body);
+  font-weight: 600;
+}
+
+.page-header-back:hover {
+  background: var(--lime-wash);
+}
+
+.page-header-spacer {
   flex: 1;
 }
 
-.mobile-header-action {
+.page-header-action {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.mobile-header-content {
-  padding: 0 16px 12px;
+/* The inline (beside-title) action is desktop-only */
+.page-header-action-inline {
+  display: none;
 }
 
-.mobile-header.large .mobile-header-title {
-  font-size: 28px; /* Compact title */
+/* Titles */
+.page-header-content {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0 14px;
+}
+
+.page-header-titles {
+  min-width: 0;
+}
+
+.page-header-eyebrow {
+  display: block;
+  font-size: 10px;
   font-weight: 700;
-  color: #000000;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lime);
+  margin-bottom: 5px;
+}
+
+.page-header.large .page-header-title {
+  font-size: clamp(26px, 7vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  color: var(--ink);
   margin: 0;
-  line-height: 1.2;
-  letter-spacing: 0.364px;
 }
 
-.mobile-header:not(.large) .mobile-header-title {
-  font-size: 17px; /* iOS inline title */
-  font-weight: 600;
-  color: #000000;
+.page-header.compact .page-header-title {
+  font-size: var(--t-lg);
+  font-weight: 650;
+  letter-spacing: -0.02em;
   margin: 0;
-  letter-spacing: -0.408px;
-  text-align: center;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
-.mobile-header-subtitle {
-  font-size: 13px; /* iOS footnote size */
-  color: #8E8E93; /* iOS secondary label */
-  margin: 2px 0 0 0;
-  letter-spacing: -0.078px;
+.page-header-subtitle {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+  margin: 4px 0 0;
+  letter-spacing: -0.005em;
 }
 
-/* Hide on desktop */
-@media (min-width: 768px) {
-  .mobile-header {
+/* --------------------------------------------------------------------------
+   Desktop
+   -------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .page-header {
+    background: rgba(11, 17, 29, 0.85);
+  }
+
+  .page-header-bar {
+    min-height: 0;
+    padding-top: 16px;
+  }
+
+  /* Actions move next to the title; the top bar keeps only the back link */
+  .page-header-action {
     display: none;
+  }
+
+  .page-header-action-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+
+  .page-header-content {
+    padding: 18px 0 20px;
+  }
+
+  .page-header.large .page-header-title {
+    font-size: 38px;
+  }
+
+  .page-header-subtitle {
+    font-size: var(--t-body);
   }
 }

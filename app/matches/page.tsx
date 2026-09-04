@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState, Suspense, useCallback } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Calendar, MapPin, Clock, Trophy, Filter } from 'lucide-react'
+import { Calendar, MapPin, Clock, ChevronRight } from 'lucide-react'
 import MobileHeader from '@/components/mobile/MobileHeader'
 import MobileContainer from '@/components/mobile/MobileContainer'
 import MobileCard from '@/components/mobile/MobileCard'
@@ -32,43 +32,38 @@ interface Match {
   awayScore: number
   homeGroup: Group
   awayGroup: Group
-  season: {
-    name: string
-  }
+  season: { name: string }
 }
+
+const STATUS_FILTERS = [
+  { value: 'all', label: 'All' },
+  { value: 'SCHEDULED', label: 'Upcoming' },
+  { value: 'IN_PROGRESS', label: 'Live' },
+  { value: 'COMPLETED', label: 'Results' }
+]
 
 function MatchesContent() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const { data: session, status } = useSession()
 
   const [seasons, setSeasons] = useState<Season[]>([])
   const [selectedSeason, setSelectedSeason] = useState<string>('')
-  const [filteredMatches, setFilteredMatches] = useState<Match[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [teamFilter, setTeamFilter] = useState<string>('all')
   const [allGroups, setAllGroups] = useState<Group[]>([])
-  const [teamName, setTeamName] = useState<string>('')
 
-  // Fetch function for matches
   const fetchMatchesData = useCallback(async (): Promise<Match[]> => {
     const response = await fetch('/api/matches')
-    if (!response.ok) {
-      throw new Error('Failed to load matches')
-    }
+    if (!response.ok) throw new Error('Failed to load matches')
     return response.json()
   }, [])
 
-  // Use cached data hook
-  const { data: matches, loading, refreshing } = useCachedData<Match[]>(
-    fetchMatchesData,
-    {
-      cacheKey: 'matches',
-      cacheDuration: 3 * 60 * 1000 // 3 minutes
-    }
-  )
+  const { data: matches, loading, refreshing } = useCachedData<Match[]>(fetchMatchesData, {
+    cacheKey: 'matches',
+    cacheDuration: 3 * 60 * 1000
+  })
 
-  // Redirect admin and referee users to admin matches view
+  // Admins and referees manage matches rather than browse them.
   useEffect(() => {
     if (status === 'loading') return
     if (session?.user.role === 'ADMIN' || session?.user.role === 'REFEREE') {
@@ -77,298 +72,222 @@ function MatchesContent() {
   }, [session, status, router])
 
   useEffect(() => {
-    fetchSeasons()
+    const load = async () => {
+      try {
+        const [seasonsRes, groupsRes] = await Promise.all([
+          fetch('/api/seasons'),
+          fetch('/api/groups')
+        ])
+        const data: Season[] = await seasonsRes.json()
+        setAllGroups(await groupsRes.json())
+        setSeasons(data)
+
+        const active = data.find((s) => s.isActive)
+        setSelectedSeason(active ? active.id : data[0]?.id || '')
+      } catch (err) {
+        console.error('Failed to load seasons:', err)
+      }
+    }
+    load()
   }, [])
 
   useEffect(() => {
-    if (selectedSeason) {
-      // Reset team filter when season changes
-      setTeamFilter('all')
-    }
+    setTeamFilter('all')
   }, [selectedSeason])
 
-  useEffect(() => {
-    filterMatches()
-  }, [matches, statusFilter, teamFilter, selectedSeason])
+  const availableGroups = allGroups.filter((g) => g.seasonId === selectedSeason)
+  const selectedSeasonData = seasons.find((s) => s.id === selectedSeason)
 
-  // Filter groups by selected season
-  const availableGroups = allGroups.filter(group => group.seasonId === selectedSeason)
-
-  const fetchSeasons = async () => {
-    try {
-      const [seasonsRes, groupsRes] = await Promise.all([
-        fetch('/api/seasons'),
-        fetch('/api/groups')
-      ])
-
-      const data = await seasonsRes.json()
-      const groupsData = await groupsRes.json()
-
-      setSeasons(data)
-      setAllGroups(groupsData)
-
-      // Select active season or first season by default
-      const activeSeason = data.find((s: Season) => s.isActive)
-      if (activeSeason) {
-        setSelectedSeason(activeSeason.id)
-      } else if (data.length > 0) {
-        setSelectedSeason(data[0].id)
-      }
-    } catch (err) {
-      console.error('Failed to load seasons:', err)
-    }
-  }
-
-  const filterMatches = () => {
-    if (!matches) {
-      setFilteredMatches([])
-      return
-    }
-
-    let filtered = matches
-
-    // Filter by season
-    const selectedSeasonData = seasons.find(s => s.id === selectedSeason)
-    if (selectedSeasonData) {
-      filtered = filtered.filter(m => m.season.name === selectedSeasonData.name)
-    }
-
-    // Filter by team
-    if (teamFilter !== 'all') {
-      filtered = filtered.filter(m =>
-        m.homeGroup.id === teamFilter || m.awayGroup.id === teamFilter
-      )
-
-      // Set team name for display
-      if (filtered.length > 0) {
-        const match = filtered[0]
-        const name = match.homeGroup.id === teamFilter
-          ? match.homeGroup.name
-          : match.awayGroup.name
-        setTeamName(name)
-      }
-    }
-
-    // Filter by status
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(m => m.status === statusFilter)
-    }
-
-    // Sort by date (newest first)
-    filtered.sort((a, b) => new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime())
-
-    setFilteredMatches(filtered)
-  }
-
-  const getStatusBadge = (status: string) => {
-    const badges: Record<string, { className: string; text: string }> = {
-      SCHEDULED: { className: 'status-scheduled', text: 'Scheduled' },
-      IN_PROGRESS: { className: 'status-live', text: 'Live' },
-      COMPLETED: { className: 'status-completed', text: 'Full Time' }
-    }
-    const badge = badges[status] || badges.SCHEDULED
-    return <span className={`status-badge ${badge.className}`}>{badge.text}</span>
-  }
+  const filteredMatches = (matches || [])
+    .filter((m) => (selectedSeasonData ? m.season.name === selectedSeasonData.name : true))
+    .filter((m) =>
+      teamFilter === 'all' ? true : m.homeGroup.id === teamFilter || m.awayGroup.id === teamFilter
+    )
+    .filter((m) => (statusFilter === 'all' ? true : m.status === statusFilter))
+    .sort((a, b) => +new Date(b.matchDate) - +new Date(a.matchDate))
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
-    const tomorrow = new Date(now)
-    tomorrow.setDate(tomorrow.getDate() + 1)
-    const yesterday = new Date(now)
-    yesterday.setDate(yesterday.getDate() - 1)
-
-    const isToday = date.toDateString() === now.toDateString()
-    const isTomorrow = date.toDateString() === tomorrow.toDateString()
-    const isYesterday = date.toDateString() === yesterday.toDateString()
-
-    if (isToday) return 'Today'
-    if (isTomorrow) return 'Tomorrow'
-    if (isYesterday) return 'Yesterday'
-
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    const diffDays = Math.round(
+      (new Date(date.toDateString()).getTime() - new Date(now.toDateString()).getTime()) / 86400000
+    )
+    if (diffDays === 0) return 'Today'
+    if (diffDays === 1) return 'Tomorrow'
+    if (diffDays === -1) return 'Yesterday'
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
   }
 
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
-  }
+  const formatTime = (dateString: string) =>
+    new Date(dateString).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 
-  const selectedSeasonData = seasons.find(s => s.id === selectedSeason)
+  const getStatusBadge = (matchStatus: string) => {
+    const badges: Record<string, { className: string; text: string }> = {
+      SCHEDULED: { className: 'status-scheduled', text: 'Scheduled' },
+      IN_PROGRESS: { className: 'status-live', text: 'Live' },
+      COMPLETED: { className: 'status-completed', text: 'Full time' },
+      CANCELLED: { className: 'status-cancelled', text: 'Cancelled' }
+    }
+    const badge = badges[matchStatus] || badges.SCHEDULED
+    return <span className={`status-badge ${badge.className}`}>{badge.text}</span>
+  }
 
   return (
     <>
       <MobileHeader
         title="Matches"
+        eyebrow="Fixtures & results"
         subtitle={selectedSeasonData?.name}
         rightAction={<RefreshIndicator isRefreshing={refreshing} />}
       />
 
       <MobileContainer>
-        {/* Season Selector */}
-        {seasons.length > 1 && (
-          <MobileCard padding="medium" className="season-selector-card">
-            <div className="season-selector-content">
-              <Calendar size={20} />
+        {/* ------------------------------------------------------------ */}
+        {/* Filters                                                      */}
+        {/* ------------------------------------------------------------ */}
+        <div className="match-filters">
+          <div className="segmented" role="tablist" aria-label="Filter by status">
+            {STATUS_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                role="tab"
+                aria-selected={statusFilter === f.value}
+                className={`segmented-item ${statusFilter === f.value ? 'active' : ''}`}
+                onClick={() => setStatusFilter(f.value)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="filter-selects">
+            {seasons.length > 1 && (
               <select
                 value={selectedSeason}
                 onChange={(e) => setSelectedSeason(e.target.value)}
-                className="season-select"
+                className="filter-select"
+                aria-label="Season"
               >
                 {seasons.map((season) => (
                   <option key={season.id} value={season.id}>
-                    {season.name} {season.isActive && '⭐'}
+                    {season.name}
+                    {season.isActive ? ' · current' : ''}
                   </option>
                 ))}
               </select>
-            </div>
-          </MobileCard>
-        )}
+            )}
 
-        {/* Filters */}
-        <MobileCard padding="medium" className="status-filter-card">
-          <div className="status-filter-content">
-            <Filter size={20} />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="status-filter-select"
-            >
-              <option value="all">All Matches</option>
-              <option value="SCHEDULED">Upcoming</option>
-              <option value="IN_PROGRESS">Live</option>
-              <option value="COMPLETED">Completed</option>
-            </select>
-          </div>
-        </MobileCard>
-
-        {/* Team Filter */}
-        {availableGroups.length > 0 && (
-          <MobileCard padding="medium" className="status-filter-card">
-            <div className="status-filter-content">
-              <Filter size={20} />
+            {availableGroups.length > 0 && (
               <select
                 value={teamFilter}
                 onChange={(e) => setTeamFilter(e.target.value)}
-                className="status-filter-select"
+                className="filter-select"
+                aria-label="Team"
               >
-                <option value="all">All Teams</option>
+                <option value="all">All teams</option>
                 {availableGroups.map((group) => (
                   <option key={group.id} value={group.id}>
                     {group.name}
                   </option>
                 ))}
               </select>
-            </div>
-          </MobileCard>
-        )}
+            )}
+          </div>
+        </div>
 
+        {/* ------------------------------------------------------------ */}
+        {/* Match list                                                   */}
+        {/* ------------------------------------------------------------ */}
         {loading && !matches ? (
           <div className="mobile-loading">
             <div className="spinner" />
-            <p>Loading matches...</p>
+            <p>Loading matches…</p>
+          </div>
+        ) : filteredMatches.length === 0 ? (
+          <div className="mobile-empty-state">
+            <div className="mobile-empty-icon">
+              <Calendar />
+            </div>
+            <h3 className="mobile-empty-title">Nothing here yet</h3>
+            <p className="mobile-empty-description">
+              {statusFilter === 'all'
+                ? 'No matches for this season yet.'
+                : `No ${STATUS_FILTERS.find((f) => f.value === statusFilter)?.label.toLowerCase()} matches for this filter.`}
+            </p>
           </div>
         ) : (
-          <>
-            {filteredMatches.length === 0 ? (
-              <div className="mobile-empty-state">
-                <div className="mobile-empty-icon">
-                  <Trophy size={64} />
-                </div>
-                <h3 className="mobile-empty-title">No matches found</h3>
-                <p className="mobile-empty-description">
-                  {statusFilter !== 'all'
-                    ? `No ${statusFilter.toLowerCase()} matches for this season`
-                    : 'No matches scheduled for this season yet'}
-                </p>
-              </div>
-            ) : (
-              <div className="mobile-section">
-                <div className="mobile-section-header">
-                  <h2 className="mobile-section-title">
-                    {teamFilter !== 'all' ? (
-                      <span>
-                        {teamName || 'Team'} Matches
-                      </span>
-                    ) : (
-                      <>
-                        {statusFilter === 'all' && 'All Matches'}
-                        {statusFilter === 'SCHEDULED' && 'Upcoming Matches'}
-                        {statusFilter === 'IN_PROGRESS' && 'Live Matches'}
-                        {statusFilter === 'COMPLETED' && 'Completed Matches'}
-                      </>
-                    )}
-                  </h2>
-                  <span className="match-count">{filteredMatches.length}</span>
-                </div>
+          <div className="mobile-section">
+            <div className="mobile-section-header">
+              <h2 className="mobile-section-title">
+                {filteredMatches.length} {filteredMatches.length === 1 ? 'match' : 'matches'}
+              </h2>
+            </div>
 
-                <div className="mobile-card-list">
-                  {filteredMatches.map((match) => (
-                    <MobileCard
-                      key={match.id}
-                      padding="medium"
-                      onClick={() => router.push(`/matches/${match.id}`)}
-                    >
-                      <div className="match-card">
-                        {/* Status Badge */}
-                        <div className="match-card-status">
-                          {getStatusBadge(match.status)}
-                          {match.status === 'IN_PROGRESS' && (
-                            <span className="live-indicator">
-                              <span className="live-dot"></span>
-                              LIVE
-                            </span>
-                          )}
-                        </div>
+            <div className="auto-grid">
+              {filteredMatches.map((match) => {
+                const played = match.status === 'COMPLETED' || match.status === 'IN_PROGRESS'
+                const homeWin = played && match.homeScore > match.awayScore
+                const awayWin = played && match.awayScore > match.homeScore
 
-                        {/* Teams and Score */}
-                        <div className="match-teams">
-                          <div className="team home-team">
-                            <div className="team-info-left">
-                              <span className="team-name">{match.homeGroup.name}</span>
-                              <span className="team-label">Home</span>
-                            </div>
-                            <div className="team-score">{match.homeScore}</div>
-                          </div>
-
-                          <div className="match-separator">
-                            <div className="separator-line"></div>
-                            <span className="separator-text">vs</span>
-                            <div className="separator-line"></div>
-                          </div>
-
-                          <div className="team away-team">
-                            <div className="team-score">{match.awayScore}</div>
-                            <div className="team-info-right">
-                              <span className="team-name">{match.awayGroup.name}</span>
-                              <span className="team-label">Away</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Match Details */}
-                        <div className="match-details">
-                          <div className="detail-item">
-                            <Calendar size={16} />
-                            <span>{formatDate(match.matchDate)}</span>
-                          </div>
-                          <div className="detail-item">
-                            <Clock size={16} />
-                            <span>{formatTime(match.matchDate)}</span>
-                          </div>
-                          {match.location && (
-                            <div className="detail-item">
-                              <MapPin size={16} />
-                              <span>{match.location}</span>
-                            </div>
-                          )}
-                        </div>
+                return (
+                  <MobileCard
+                    key={match.id}
+                    padding="medium"
+                    onClick={() => router.push(`/matches/${match.id}`)}
+                    className="match-card-wrap"
+                  >
+                    <div className="match-card">
+                      <div className="match-card-top">
+                        {getStatusBadge(match.status)}
+                        <ChevronRight size={16} className="match-go" />
                       </div>
-                    </MobileCard>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
+
+                      <div className="match-line">
+                        <span className={`match-team ${homeWin ? 'won' : ''}`}>
+                          {match.homeGroup.name}
+                        </span>
+                        <span className="match-figures">
+                          {played ? (
+                            <>
+                              <span className={`match-num ${homeWin ? 'won' : ''}`}>
+                                {match.homeScore}
+                              </span>
+                              <span className="match-sep">–</span>
+                              <span className={`match-num ${awayWin ? 'won' : ''}`}>
+                                {match.awayScore}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="match-vs">vs</span>
+                          )}
+                        </span>
+                        <span className={`match-team match-team-away ${awayWin ? 'won' : ''}`}>
+                          {match.awayGroup.name}
+                        </span>
+                      </div>
+
+                      <div className="match-meta">
+                        <span>
+                          <Calendar size={13} />
+                          {formatDate(match.matchDate)}
+                        </span>
+                        <span>
+                          <Clock size={13} />
+                          {formatTime(match.matchDate)}
+                        </span>
+                        {match.location && (
+                          <span className="match-meta-location">
+                            <MapPin size={13} />
+                            {match.location}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </MobileCard>
+                )
+              })}
+            </div>
+          </div>
         )}
       </MobileContainer>
     </>
@@ -377,12 +296,14 @@ function MatchesContent() {
 
 export default function Matches() {
   return (
-    <Suspense fallback={
-      <div className="mobile-loading">
-        <div className="spinner" />
-        <p>Loading...</p>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="mobile-loading">
+          <div className="spinner" />
+          <p>Loading…</p>
+        </div>
+      }
+    >
       <MatchesContent />
     </Suspense>
   )

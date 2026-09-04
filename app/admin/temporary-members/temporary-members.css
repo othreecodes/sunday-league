@@ -1,7 +1,7 @@
 .back-btn {
   background: none;
   border: none;
-  color: #e90052;
+  color: var(--lime);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,14 +25,14 @@
   justify-content: center;
   padding: 3rem 1rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #e5e7eb;
-  border-top-color: #e90052;
+  border: 3px solid var(--line-neutral);
+  border-top-color: var(--lime);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -55,24 +55,24 @@
   justify-content: center;
   padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .mobile-empty-icon {
-  color: #d1d5db;
+  color: var(--ink-4);
   margin-bottom: 1rem;
 }
 
 .mobile-empty-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0 0 0.5rem 0;
 }
 
 .mobile-empty-description {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
   margin: 0;
 }
 
@@ -93,11 +93,11 @@
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
-  background: #f3f4f6;
+  background: var(--pitch-800);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
+  color: var(--ink-3);
   flex-shrink: 0;
 }
 
@@ -109,20 +109,20 @@
 .temp-user-info h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0 0 0.25rem 0;
 }
 
 .temp-user-nickname {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .temp-user-stats {
   display: flex;
   gap: 1.5rem;
   padding: 1rem;
-  background: #f9fafb;
+  background: var(--pitch-800);
   border-radius: 0.5rem;
 }
 
@@ -135,18 +135,18 @@
 }
 
 .stat-item svg {
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .stat-value {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #1e1e1e;
+  color: var(--ink);
 }
 
 .stat-label {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--ink-3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -160,7 +160,7 @@
 .groups-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .groups-list {
@@ -173,8 +173,8 @@
   display: inline-flex;
   align-items: center;
   padding: 0.375rem 0.75rem;
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--cyan-wash);
+  color: var(--cyan);
   border-radius: 0.375rem;
   font-size: 0.75rem;
   font-weight: 600;
@@ -187,8 +187,8 @@
   gap: 0.5rem;
   width: 100%;
   padding: 0.875rem 1.5rem;
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
   border: none;
   border-radius: 0.5rem;
   font-weight: 600;
@@ -199,7 +199,7 @@
 
 .btn-merge:active {
   transform: scale(0.98);
-  background: #c4003e;
+  background: var(--lime-deep);
 }
 
 /* Modal */
@@ -218,30 +218,30 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--surface);
   border-radius: 0.75rem;
   padding: 1.5rem;
   max-width: 500px;
   width: 100%;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.22), 0 10px 10px -5px rgba(0, 0, 0, 0.09);
 }
 
 .modal-content h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0 0 0.75rem 0;
 }
 
 .modal-description {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
   margin: 0 0 1.5rem 0;
   line-height: 1.5;
 }
 
 .modal-description strong {
-  color: #1e1e1e;
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -253,24 +253,24 @@
   display: block;
   font-weight: 600;
   font-size: 0.875rem;
-  color: #1e1e1e;
+  color: var(--ink);
   margin-bottom: 0.5rem;
 }
 
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  background: white;
-  color: #1e1e1e;
+  background: var(--surface);
+  color: var(--ink);
   transition: border-color 0.2s;
 }
 
 .form-group select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .modal-actions {
@@ -282,8 +282,8 @@
 .btn-cancel {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--pitch-800);
+  color: var(--ink-3);
   border: none;
   border-radius: 0.5rem;
   font-weight: 600;
@@ -293,7 +293,7 @@
 }
 
 .btn-cancel:hover:not(:disabled) {
-  background: #e5e7eb;
+  background: var(--pitch-700);
 }
 
 .btn-cancel:disabled {
@@ -304,8 +304,8 @@
 .btn-submit {
   flex: 1;
   padding: 0.75rem 1.5rem;
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   border: none;
   border-radius: 0.5rem;
   font-weight: 600;
@@ -315,10 +315,10 @@
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: #000000;
+  background: var(--pitch-950);
 }
 
 .btn-submit:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }

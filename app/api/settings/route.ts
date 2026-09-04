@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { DEFAULT_LEAGUE_NAME } from "@/lib/brand"
 
 // GET settings
 export async function GET() {
@@ -13,7 +14,7 @@ export async function GET() {
       settings = await prisma.settings.create({
         data: {
           id: 'default-settings',
-          leagueName: 'SundayLeague FC',
+          leagueName: DEFAULT_LEAGUE_NAME,
           matchesPerSeason: 1
         }
       })
@@ -70,7 +71,7 @@ export async function PATCH(req: Request) {
       settings = await prisma.settings.create({
         data: {
           id: 'default-settings',
-          leagueName: data.leagueName || 'SundayLeague FC',
+          leagueName: data.leagueName || DEFAULT_LEAGUE_NAME,
           matchesPerSeason: data.matchesPerSeason || 1
         }
       })

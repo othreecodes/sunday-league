@@ -1,20 +1,20 @@
 .settings-container {
   min-height: 100vh;
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .settings-header {
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   padding: 1.5rem 1rem;
-  border-bottom: 3px solid #e90052;
+  border-bottom: 3px solid var(--lime);
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--ink);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: opacity 0.2s;
@@ -45,7 +45,7 @@
 .loading {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .loading-container {
@@ -56,8 +56,8 @@
 }
 
 .settings-card {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 2rem;
 }
@@ -65,12 +65,12 @@
 .settings-card h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   margin: 0 0 0.5rem 0;
 }
 
 .settings-description {
-  color: #6b7280;
+  color: var(--ink-3);
   font-size: 0.875rem;
   margin: 0 0 2rem 0;
 }
@@ -86,21 +86,21 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
-  background: #f9fafb;
+  background: var(--pitch-800);
   border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--line-neutral);
 }
 
 .setting-label-group label {
   display: block;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
   font-size: 1rem;
   margin-bottom: 0.5rem;
 }
 
 .setting-description {
-  color: #6b7280;
+  color: var(--ink-3);
   font-size: 0.875rem;
   line-height: 1.6;
   margin: 0;
@@ -114,7 +114,7 @@
 
 .setting-input-group input {
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 1rem;
   max-width: 200px;
@@ -123,11 +123,11 @@
 
 .setting-input-group input:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .input-hint {
-  color: #6b7280;
+  color: var(--ink-3);
   font-size: 0.75rem;
 }
 
@@ -136,7 +136,7 @@
   align-items: center;
   gap: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--line-neutral);
 }
 
 .btn-submit {
@@ -144,8 +144,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -154,18 +154,18 @@
 }
 
 .btn-submit:hover:not(:disabled) {
-  background: #c4003e;
+  background: var(--lime-deep);
 }
 
 .btn-submit:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }
 
 .save-message {
   padding: 0.75rem 1rem;
-  background: #d1fae5;
-  color: #065f46;
+  background: var(--lime-wash);
+  color: var(--lime);
   border-radius: 0.25rem;
   font-size: 0.875rem;
   font-weight: 500;

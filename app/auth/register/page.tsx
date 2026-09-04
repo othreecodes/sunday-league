@@ -3,12 +3,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useSettings } from '@/hooks/useSettings'
+import BrandMark from '@/components/BrandMark'
+import { BRAND_NAME } from '@/lib/brand'
 import '../signin/signin.css'
 
 export default function Register() {
   const router = useRouter()
-  const { leagueName } = useSettings()
   const [formData, setFormData] = useState({
     name: '',
     nickname: '',
@@ -78,7 +78,8 @@ export default function Register() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>⚽ {leagueName}</h1>
+          <BrandMark size={52} />
+          <h1>{BRAND_NAME}</h1>
           <p>Create your account</p>
         </div>
 

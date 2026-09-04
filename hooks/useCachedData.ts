@@ -8,6 +8,11 @@ interface CacheEntry<T> {
 interface UseCachedDataOptions {
   cacheKey: string
   cacheDuration?: number // in milliseconds, default 5 minutes
+  /**
+   * Defer fetching until a dependency is ready (e.g. the selected season).
+   * Without this the first render fires a request that is guaranteed to fail.
+   */
+  enabled?: boolean
 }
 
 interface UseCachedDataReturn<T> {
@@ -22,10 +27,10 @@ export function useCachedData<T>(
   fetchFn: () => Promise<T>,
   options: UseCachedDataOptions
 ): UseCachedDataReturn<T> {
-  const { cacheKey, cacheDuration = 5 * 60 * 1000 } = options
+  const { cacheKey, cacheDuration = 5 * 60 * 1000, enabled = true } = options
 
   const [data, setData] = useState<T | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(enabled)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
@@ -87,6 +92,8 @@ export function useCachedData<T>(
 
   // Initial load and refetch on cacheKey change
   useEffect(() => {
+    if (!enabled) return
+
     const cached = getCachedData()
 
     if (cached) {
@@ -100,7 +107,7 @@ export function useCachedData<T>(
       // No cache, show loading
       fetchData(false)
     }
-  }, [cacheKey, getCachedData, fetchData])
+  }, [cacheKey, enabled, getCachedData, fetchData])
 
   // Manual refetch function
   const refetch = useCallback(async () => {

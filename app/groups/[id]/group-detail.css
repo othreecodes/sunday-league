@@ -2,7 +2,7 @@
 .back-btn {
   background: none;
   border: none;
-  color: #007AFF; /* iOS system blue */
+  color: var(--cyan); /* iOS system blue */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +38,7 @@
 }
 
 .stat-icon {
-  color: #007AFF; /* iOS system blue */
+  color: var(--cyan); /* iOS system blue */
   flex-shrink: 0;
 }
 
@@ -51,13 +51,13 @@
 .stat-value {
   font-size: 1.875rem;
   font-weight: 800;
-  color: #1e1e1e;
+  color: var(--ink);
   line-height: 1;
 }
 
 .stat-label {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -79,7 +79,7 @@
 .mobile-section-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0;
   display: flex;
   align-items: center;
@@ -92,8 +92,8 @@
   min-width: 32px;
   height: 32px;
   padding: 0 0.625rem;
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--pitch-800);
+  color: var(--ink-3);
   border-radius: 1rem;
   font-size: 0.875rem;
   font-weight: 700;
@@ -110,7 +110,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--line-neutral);
 }
 
 .member-item:last-child {
@@ -123,12 +123,12 @@
   justify-content: center;
   min-width: 40px;
   height: 40px;
-  background: #f9fafb;
-  border: 2px solid #e5e7eb;
+  background: var(--pitch-800);
+  border: 2px solid var(--line-neutral);
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 700;
-  color: #6b7280;
+  color: var(--ink-3);
   flex-shrink: 0;
 }
 
@@ -142,7 +142,7 @@
 .member-name {
   font-size: 1rem;
   font-weight: 600;
-  color: #1e1e1e;
+  color: var(--ink);
 }
 
 .member-role {
@@ -150,14 +150,14 @@
   align-items: center;
   gap: 0.25rem;
   font-size: 0.75rem;
-  color: #007AFF; /* iOS system blue */
+  color: var(--cyan); /* iOS system blue */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
 
 .member-role svg {
-  color: #fbbf24;
+  color: var(--amber);
 }
 
 /* Loading */
@@ -168,14 +168,14 @@
   justify-content: center;
   padding: 3rem 1rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #e5e7eb;
-  border-top-color: #007AFF; /* iOS system blue */
+  border: 3px solid var(--line-neutral);
+  border-top-color: var(--cyan); /* iOS system blue */
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 1rem;
@@ -203,24 +203,24 @@
   justify-content: center;
   padding: 3rem 2rem;
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .mobile-empty-icon {
-  color: #d1d5db;
+  color: var(--ink-4);
   margin-bottom: 1rem;
 }
 
 .mobile-empty-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e1e1e;
+  color: var(--ink);
   margin: 0 0 0.5rem 0;
 }
 
 .mobile-empty-description {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
   margin: 0;
 }
 
@@ -255,7 +255,7 @@
 
 .match-date-compact {
   font-size: 0.875rem;
-  color: #8E8E93; /* iOS secondary label */
+  color: var(--ink-3); /* iOS secondary label */
   font-weight: 500;
 }
 
@@ -275,19 +275,19 @@
 .team-label-compact {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #8E8E93; /* iOS secondary label */
+  color: var(--ink-3); /* iOS secondary label */
 }
 
 .opponent-name-compact {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #000000;
+  color: var(--ink);
 }
 
 .score-compact {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #000000;
+  color: var(--ink);
 }
 
 /* Status Badges */
@@ -305,17 +305,17 @@
 
 .status-scheduled {
   background: rgba(0, 122, 255, 0.1); /* iOS blue with opacity */
-  color: #007AFF;
+  color: var(--cyan);
 }
 
 .status-live {
   background: rgba(255, 204, 0, 0.2); /* iOS yellow with opacity */
-  color: #FF9500;
+  color: var(--amber);
 }
 
 .status-completed {
   background: rgba(52, 199, 89, 0.15); /* iOS green with opacity */
-  color: #34C759;
+  color: var(--lime);
 }
 
 /* Desktop */

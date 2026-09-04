@@ -1,96 +1,65 @@
+/* ==========================================================================
+   Page content container
+   ========================================================================== */
+
 .mobile-container {
-  min-height: 100vh;
-  background: #F2F2F7; /* iOS system background */
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  min-height: 60vh;
+  /* Clear the fixed bottom tab bar */
+  padding-bottom: calc(var(--tabbar-h) + 28px + var(--safe-area-inset-bottom));
 }
 
 .mobile-container.padded {
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 16px;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+  padding-top: 20px;
 }
 
-/* Section grouping */
-.mobile-section {
-  margin-bottom: 1.5rem;
-}
+@media (min-width: 1024px) {
+  .mobile-container {
+    /* No bottom tab bar on desktop */
+    padding-bottom: 64px;
+  }
 
-.mobile-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  padding: 0 0.25rem;
-}
-
-.mobile-section-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1e1e1e;
-  margin: 0;
-}
-
-.mobile-section-action {
-  font-size: 17px;
-  color: #007AFF; /* iOS system blue */
-  font-weight: 600;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  min-height: 44px;
-  letter-spacing: -0.408px;
-}
-
-.mobile-section-action:active {
-  opacity: 0.7;
-}
-
-/* Card list spacing */
-.mobile-card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-/* Grid layout for cards */
-.mobile-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-}
-
-@media (min-width: 480px) {
-  .mobile-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .mobile-container.padded {
+    padding-top: 26px;
   }
 }
 
-/* Empty state */
-.mobile-empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2rem;
-  text-align: center;
-  color: #6b7280;
+/* --------------------------------------------------------------------------
+   Layout helpers used by pages
+   -------------------------------------------------------------------------- */
+
+/* Two-column split that collapses on small screens. Used on League and Home
+   so the desktop width earns its keep instead of stretching one column. */
+.split-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
 }
 
-.mobile-empty-icon {
-  color: #d1d5db;
-  margin-bottom: 1rem;
+@media (min-width: 1024px) {
+  .split-2 {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 24px;
+  }
 }
 
-.mobile-empty-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #1e1e1e;
-  margin: 0 0 0.5rem 0;
+/* Auto-fitting card grid for match lists */
+.auto-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
-.mobile-empty-description {
-  font-size: 0.875rem;
-  color: #6b7280;
-  margin: 0 0 1.5rem 0;
+@media (min-width: 720px) {
+  .auto-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
 }

@@ -125,7 +125,7 @@ model Card {
 
 model Settings {
   id               String   @id @default(cuid())
-  leagueName       String   @default("SundayLeague FC")
+  leagueName       String   @default("Cowrywise FC")
   matchesPerSeason Int      @default(1)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt

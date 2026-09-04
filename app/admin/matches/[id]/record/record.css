@@ -1,20 +1,65 @@
+/* Scoreboard: the away side is markup-ordered score-then-name, so pin the
+   visual order to keep both halves mirrored. */
+.overview-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.overview-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  text-align: center;
+}
+
+.overview-team-name {
+  order: 1;
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.overview-score {
+  order: 2;
+  font-family: var(--font-secondary);
+  font-size: clamp(30px, 10vw, 42px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--lime);
+  font-variant-numeric: tabular-nums;
+}
+
+.overview-vs {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
 .record-container {
   min-height: 100vh;
-  background: #f9fafb;
+  background: var(--pitch-800);
 }
 
 .record-header {
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   padding: 1.5rem 1rem;
-  border-bottom: 3px solid #e90052;
+  border-bottom: 3px solid var(--lime);
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: white;
+  color: var(--ink);
   font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: opacity 0.2s;
@@ -36,54 +81,24 @@
 }
 
 .match-overview {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 2rem;
   margin-bottom: 2rem;
 }
 
-.overview-teams {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
 
-.overview-team {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-}
 
-.overview-team-name {
-  font-weight: 600;
-  color: #1f2937;
-  text-align: center;
-  font-size: 1.125rem;
-}
 
-.overview-score {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #e90052;
-}
 
-.overview-vs {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #6b7280;
-  padding: 0 1.5rem;
-}
 
 .overview-info {
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
   font-size: 0.875rem;
   padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--line-neutral);
 }
 
 .record-sections {
@@ -94,8 +109,8 @@
 }
 
 .record-section {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 1.5rem;
 }
@@ -110,7 +125,7 @@
 .section-header h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .btn-add {
@@ -118,8 +133,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #e90052;
-  color: white;
+  background: var(--lime);
+  color: var(--on-lime);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -129,12 +144,12 @@
 }
 
 .btn-add:hover {
-  background: #c4003e;
+  background: var(--lime-deep);
 }
 
 .event-form {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--pitch-800);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -149,24 +164,24 @@
 
 .form-group label {
   font-weight: 500;
-  color: #374151;
+  color: var(--ink-2);
   font-size: 0.875rem;
 }
 
 .form-group input,
 .form-group select {
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-size: 1rem;
-  background: white;
+  background: var(--surface);
   transition: border-color 0.2s;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #e90052;
+  border-color: var(--lime);
 }
 
 .form-actions {
@@ -177,8 +192,8 @@
 
 .btn-submit {
   padding: 0.75rem 1.5rem;
-  background: #1e1e1e;
-  color: white;
+  background: var(--pitch-700);
+  color: var(--ink);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -187,19 +202,19 @@
 }
 
 .btn-submit:hover {
-  background: #000;
+  background: var(--pitch-950);
 }
 
 .btn-submit:disabled {
-  background: #9ca3af;
+  background: var(--pitch-600);
   cursor: not-allowed;
 }
 
 .btn-cancel {
   padding: 0.75rem 1.5rem;
-  background: white;
-  color: #1f2937;
-  border: 1px solid #d1d5db;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
   font-weight: 600;
   cursor: pointer;
@@ -207,7 +222,7 @@
 }
 
 .btn-cancel:hover {
-  background: #f3f4f6;
+  background: var(--pitch-800);
 }
 
 .events-list {
@@ -218,7 +233,7 @@
 
 .empty-message {
   text-align: center;
-  color: #6b7280;
+  color: var(--ink-3);
   padding: 2rem;
   font-size: 0.875rem;
 }
@@ -228,8 +243,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--pitch-800);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
 }
 
@@ -242,23 +257,23 @@
 
 .event-minute {
   font-weight: 600;
-  color: #e90052;
+  color: var(--lime);
   min-width: 2.5rem;
 }
 
 .event-player {
   font-weight: 500;
-  color: #1f2937;
+  color: var(--ink);
 }
 
 .event-assist {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
 }
 
 .event-reason {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--ink-3);
   font-style: italic;
 }
 
@@ -272,34 +287,34 @@
 }
 
 .card-yellow {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--amber-wash);
+  color: var(--amber);
 }
 
 .card-red {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--coral-wash);
+  color: var(--coral);
 }
 
 .btn-delete-small {
   padding: 0.5rem;
-  background: white;
-  border: 1px solid #d1d5db;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.25rem;
-  color: #dc2626;
+  color: var(--coral);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .btn-delete-small:hover {
-  background: #dc2626;
-  color: white;
-  border-color: #dc2626;
+  background: var(--coral);
+  color: var(--on-lime);
+  border-color: var(--coral);
 }
 
 .complete-section {
-  background: white;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--line-neutral);
   border-radius: 0.5rem;
   padding: 2rem;
   text-align: center;
@@ -310,8 +325,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 2rem;
-  background: #059669;
-  color: white;
+  background: var(--lime-deep);
+  color: var(--on-lime);
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -321,14 +336,14 @@
 }
 
 .btn-complete:hover {
-  background: #047857;
+  background: var(--lime-deep);
 }
 
 .complete-warning {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--ink-3);
   font-size: 0.875rem;
   margin-top: 1rem;
 }
@@ -343,7 +358,7 @@
 .loading {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--ink-3);
   font-size: 1.125rem;
 }
 
