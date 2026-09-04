@@ -124,9 +124,13 @@ model Card {
 }
 
 model Settings {
-  id               String   @id @default(cuid())
-  leagueName       String   @default("Cowrywise FC")
-  matchesPerSeason Int      @default(1)
+  id                   String   @id @default(cuid())
+  leagueName           String   @default("Cowrywise FC")
+  matchesPerSeason     Int      @default(1)
+  /// Kickoff for the first match of the match day, "HH:MM" in league local time.
+  matchDayKickoff      String   @default("15:00")
+  /// Minutes between consecutive kickoffs on the match day.
+  matchIntervalMinutes Int      @default(30)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

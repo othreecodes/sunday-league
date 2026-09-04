@@ -64,6 +64,24 @@ export async function PATCH(req: Request) {
       }
     }
 
+    if (data.matchDayKickoff !== undefined) {
+      if (typeof data.matchDayKickoff !== 'string' || !/^([01]\d|2[0-3]):[0-5]\d$/.test(data.matchDayKickoff)) {
+        return NextResponse.json(
+          { error: "matchDayKickoff must be a time in HH:MM form" },
+          { status: 400 }
+        )
+      }
+    }
+
+    if (data.matchIntervalMinutes !== undefined) {
+      if (typeof data.matchIntervalMinutes !== 'number' || data.matchIntervalMinutes < 5 || data.matchIntervalMinutes > 240) {
+        return NextResponse.json(
+          { error: "matchIntervalMinutes must be a number between 5 and 240" },
+          { status: 400 }
+        )
+      }
+    }
+
     // Get existing settings or create if not exists
     let settings = await prisma.settings.findFirst()
 

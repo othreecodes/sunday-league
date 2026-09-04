@@ -14,6 +14,8 @@ interface Settings {
   id: string
   leagueName: string
   matchesPerSeason: number
+  matchDayKickoff: string
+  matchIntervalMinutes: number
 }
 
 export default function SettingsPage() {
@@ -23,7 +25,9 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     leagueName: DEFAULT_LEAGUE_NAME,
-    matchesPerSeason: 1
+    matchesPerSeason: 1,
+    matchDayKickoff: '15:00',
+    matchIntervalMinutes: 30
   })
   const [submitting, setSubmitting] = useState(false)
   const [saveMessage, setSaveMessage] = useState<string | null>(null)
@@ -48,7 +52,9 @@ export default function SettingsPage() {
         setSettings(data)
         setFormData({
           leagueName: data.leagueName,
-          matchesPerSeason: data.matchesPerSeason
+          matchesPerSeason: data.matchesPerSeason,
+          matchDayKickoff: data.matchDayKickoff || '15:00',
+          matchIntervalMinutes: data.matchIntervalMinutes ?? 30
         })
       }
     } catch (error) {
@@ -162,6 +168,49 @@ export default function SettingsPage() {
                     required
                   />
                   <span className="input-hint">Between 1 and 10</span>
+                </div>
+              </div>
+
+              <div className="setting-item">
+                <div className="setting-label-group">
+                  <label htmlFor="matchDayKickoff">First Kickoff</label>
+                  <p className="setting-description">
+                    Every fixture is played on one match day, back to back. This is
+                    the kickoff time of the first match.
+                  </p>
+                </div>
+                <div className="setting-input-group">
+                  <input
+                    type="time"
+                    id="matchDayKickoff"
+                    value={formData.matchDayKickoff}
+                    onChange={(e) => setFormData({ ...formData, matchDayKickoff: e.target.value })}
+                    required
+                  />
+                  <span className="input-hint">Match day is the season start date</span>
+                </div>
+              </div>
+
+              <div className="setting-item">
+                <div className="setting-label-group">
+                  <label htmlFor="matchIntervalMinutes">Minutes Between Kickoffs</label>
+                  <p className="setting-description">
+                    How long each slot lasts. Fixtures are ordered so no team plays
+                    two games back to back.
+                  </p>
+                </div>
+                <div className="setting-input-group">
+                  <input
+                    type="number"
+                    id="matchIntervalMinutes"
+                    min="5"
+                    max="240"
+                    step="5"
+                    value={formData.matchIntervalMinutes}
+                    onChange={(e) => setFormData({ ...formData, matchIntervalMinutes: parseInt(e.target.value) })}
+                    required
+                  />
+                  <span className="input-hint">Between 5 and 240</span>
                 </div>
               </div>
 
