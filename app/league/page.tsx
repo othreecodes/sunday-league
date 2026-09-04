@@ -323,7 +323,8 @@ export default function League() {
                             <span className="scorer-meta">
                               {player.matchesPlayed}{' '}
                               {player.matchesPlayed === 1 ? 'match' : 'matches'}
-                              {player.assists > 0 && ` · ${player.assists} assists`}
+                              {player.assists > 0 &&
+                                ` · ${player.assists} ${player.assists === 1 ? 'assist' : 'assists'}`}
                             </span>
                           </span>
                           <span className="scorer-figure">
